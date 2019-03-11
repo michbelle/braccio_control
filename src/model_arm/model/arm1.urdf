@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot name="arm">
+  <link name="base_link">
+    <visual>
+    <origin rpy="0 0 0" xyz="0 0 4"/>
+      <geometry>
+        <mesh filename="arm.stl"/>
+      </geometry>
+    </visual>
+  </link>
+</robot>
