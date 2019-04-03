@@ -1,0 +1,2 @@
+model_arm_result:servo_control
+-DCATKIN_DEVEL_PREFIX=/home/michele/braccio_control/devel -DCMAKE_INSTALL_PREFIX=/home/michele/braccio_control/install -G Unix Makefiles
