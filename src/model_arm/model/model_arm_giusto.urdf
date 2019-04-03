@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<robot name="arm">
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.93 0.90 0.30"/>
+      </geometry> 
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.93 0.90 0.30"/>
+      </geometry> 
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+  <link name="base_up">
+    <visual>
+      <geometry>
+        <box size="0.52 0.28 0.51"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.52 0.28 0.51"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="baseup_link" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_up"/>
+    <origin xyz="0.205 0.03 0.405"/>
+  </joint>
+
+  <link name="servo_rotz">
+    <visual>
+      <geometry>
+        <box size="0.58 0.60 0.25"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.14 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.58 0.60 0.25"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.14 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="servo_link2" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="base_up"/>
+    <child link="servo_rotz"/>
+    <origin xyz="0.11 -0.01 0.38"/>
+  </joint>
+
+  <link name="connection_servo12">
+    <visual>
+      <geometry>
+        <box size="1.3 0.6 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.52 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.3 0.6 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.52 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="con_up_1" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="servo_rotz"/>
+    <child link="connection_servo12"/>
+    <origin xyz="-0.05 0 0.045"/>
+  </joint>
+
+
+  <link name="connection_servo23">
+    <visual>
+      <geometry>
+        <box size="1.83 0.60 0.55"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.735 0 0.145"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.83 0.60 0.55"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.735 0 0.145"/>
+    </collision>
+  </link>
+
+  <joint name="con_up_2" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="connection_servo12"/>
+    <child link="connection_servo23"/>
+    <origin xyz=" -1.04 0 0"/>
+  </joint>
+
+  <link name="servo_arm_rotation">
+    <visual>
+      <geometry>
+        <box size="0.82 0.60 0.25 "/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.28 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.82 0.60 0.25 "/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.28 0 0"/>
+    </collision>
+  </link>
+
+ <joint name="con_up_3" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="connection_servo23"/>
+    <child link="servo_arm_rotation"/>
+    <origin xyz="-1.43 0 0"/>
+  </joint>
+
+  <link name="gripper_b">
+    <visual>
+      <geometry>
+        <box size="0.4 0.6 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.4 0.6 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+ <joint name="rotation_grip" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort="1000.0" lower="0" upper="3.14" velocity="0.5"/>
+    <parent link="servo_arm_rotation"/>
+    <child link="gripper_b"/>
+    <origin xyz="-0.74 0 0"/>
+  </joint>
+
+  <link name="left_g">
+    <visual>
+      <geometry>
+        <box size="0.35 0.15 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.35 0.15 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+ <joint name="fix_left" type="fixed">
+    <parent link="gripper_b"/>
+    <child link="left_g"/>
+    <origin xyz="-0.375 0.225 0"/>
+  </joint>
+
+  <link name="right_g">
+    <visual>
+      <geometry>
+        <box size="0.35 0.15 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.35 0.15 0.26"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+
+ <joint name="plan_move" type="prismatic">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="0" upper="-0.55" velocity="0.5"/>
+    <parent link="left_g"/>
+    <child link="right_g"/>
+    <origin xyz="0 -0.15 0"/>
+  </joint>
+
+<!-- -->
+</robot>

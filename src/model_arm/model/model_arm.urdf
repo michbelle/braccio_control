@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<robot name="arm">
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="9.3 9.0 3.0"/>
+      </geometry> 
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <link name="base_up">
+    <visual>
+      <geometry>
+        <box size="5.2 2.8 5.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="baseup_link" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_up"/>
+    <origin xyz="2.05 0.3 4.05"/>
+  </joint>
+
+  <link name="servo_rotz">
+    <visual>
+      <geometry>
+        <box size="05.8 6.0 2.5"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-1.4 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="servo_link2" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="base_up"/>
+    <child link="servo_rotz"/>
+    <origin xyz="1.1 -0.1 3.8"/>
+  </joint>
+
+  <link name="connection_servo12">
+    <visual>
+      <geometry>
+        <box size="13 6 2.6"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-5.2 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="con_up_1" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="servo_rotz"/>
+    <child link="connection_servo12"/>
+    <origin xyz="-0.5 0 0.45"/>
+  </joint>
+
+
+  <link name="connection_servo23">
+    <visual>
+      <geometry>
+        <box size="18.3 6.0 5.5"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-7.35 0 1.45"/>
+    </visual>
+  </link>
+
+  <joint name="con_up_2" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="connection_servo12"/>
+    <child link="connection_servo23"/>
+    <origin xyz=" -10.4 0 0"/>
+  </joint>
+
+  <link name="servo_arm_rotation">
+    <visual>
+      <geometry>
+        <box size="8.2 6.0 2.5 "/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-2.8 0 0"/>
+    </visual>
+  </link>
+
+ <joint name="con_up_3" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="connection_servo23"/>
+    <child link="servo_arm_rotation"/>
+    <origin xyz="-14.3 0 0"/>
+  </joint>
+
+  <link name="gripper_b">
+    <visual>
+      <geometry>
+        <box size="4 6 2.6"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+ <joint name="rotation_grip" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort="1000.0" lower="0" upper="3.14" velocity="0.5"/>
+    <parent link="servo_arm_rotation"/>
+    <child link="gripper_b"/>
+    <origin xyz="-7.4 0 0"/>
+  </joint>
+
+  <link name="left_g">
+    <visual>
+      <geometry>
+        <box size="3.5 1.5 2.6"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+ <joint name="fix_left" type="fixed">
+    <parent link="gripper_b"/>
+    <child link="left_g"/>
+    <origin xyz="-3.75 2.25 0"/>
+  </joint>
+
+  <link name="right_g">
+    <visual>
+      <geometry>
+        <box size="3.5 1.5 2.6"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+ <joint name="plan_move" type="prismatic">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="0" upper="-5.5" velocity="0.5"/>
+    <parent link="left_g"/>
+    <child link="right_g"/>
+    <origin xyz="0 -1.5 0"/>
+  </joint>
+
+<!-- -->
+</robot>
