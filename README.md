@@ -2,4 +2,7 @@
 
 ##Costruzione del modello del braccio
 
+prima del lancio di rviz bisogna adeguarsi agli americani :-(
+    usare il comando 
+    export LC_NUMERIC="en_US.UTF-8"
 ##Creazione del file per la realizzazionde della navigazione del braccio
