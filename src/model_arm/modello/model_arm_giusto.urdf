@@ -191,7 +191,7 @@
 
  <joint name="plan_move" type="prismatic">
     <axis xyz="0 1 0"/>
-    <limit effort="1000.0" lower="0" upper="-0.55" velocity="0.5"/>
+    <limit effort="1000.0" lower="-0.55" upper="-0.05" velocity="0.5"/>
     <parent link="left_g"/>
     <child link="right_g"/>
     <origin xyz="0 -0.15 0"/>

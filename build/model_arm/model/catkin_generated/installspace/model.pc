@@ -1,0 +1,8 @@
+prefix=/home/michele/braccio_control/install
+
+Name: model
+Description: Description of model
+Version: 0.3.0
+Cflags: 
+Libs: -L/home/michele/braccio_control/install/lib 
+Requires: 

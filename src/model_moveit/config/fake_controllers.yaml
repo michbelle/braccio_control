@@ -1,0 +1,9 @@
+controller_list:
+  - name: fake_boba_controller
+    joints:
+      - servo_link2
+      - con_up_1
+      - con_up_2
+      - con_up_3
+      - rotation_grip
+      - plan_move

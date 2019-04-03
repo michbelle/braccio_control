@@ -5,5 +5,5 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
-subdirs("model_arm_result")
+subdirs("model_moveit")
 subdirs("servo_control")

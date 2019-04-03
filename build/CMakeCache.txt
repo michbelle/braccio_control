@@ -266,6 +266,9 @@ RT_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.so
 //Enable debian style python package layout
 SETUPTOOLS_DEB_LAYOUT:BOOL=ON
 
+//Name of the computer/site where compile is being run
+SITE:STRING=pc
+
 //LSB Distrib tag
 UBUNTU:BOOL=TRUE
 
@@ -346,10 +349,22 @@ lib:FILEPATH=/opt/ros/melodic/lib/librostime.so
 message_runtime_DIR:PATH=/opt/ros/melodic/share/message_runtime/cmake
 
 //Value Computed by CMake
+model_BINARY_DIR:STATIC=/home/michele/braccio_control/build/model_arm/model
+
+//Value Computed by CMake
+model_SOURCE_DIR:STATIC=/home/michele/braccio_control/src/model_arm/model
+
+//Value Computed by CMake
 model_arm_result_BINARY_DIR:STATIC=/home/michele/braccio_control/build/model_arm_result
 
 //Value Computed by CMake
 model_arm_result_SOURCE_DIR:STATIC=/home/michele/braccio_control/src/model_arm_result
+
+//Value Computed by CMake
+model_moveit_BINARY_DIR:STATIC=/home/michele/braccio_control/build/model_moveit
+
+//Value Computed by CMake
+model_moveit_SOURCE_DIR:STATIC=/home/michele/braccio_control/src/model_moveit
 
 //The directory containing a CMake configuration file for roscpp_serialization.
 roscpp_serialization_DIR:PATH=/opt/ros/melodic/share/roscpp_serialization/cmake

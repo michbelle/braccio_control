@@ -73,38 +73,47 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/michele/braccio_control/install/setup.bash")
+   "/home/michele/braccio_control/install/setup.bash;/home/michele/braccio_control/install/local_setup.bash")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/michele/braccio_control/install" TYPE FILE FILES "/home/michele/braccio_control/build/catkin_generated/installspace/setup.bash")
+file(INSTALL DESTINATION "/home/michele/braccio_control/install" TYPE FILE FILES
+    "/home/michele/braccio_control/build/catkin_generated/installspace/setup.bash"
+    "/home/michele/braccio_control/build/catkin_generated/installspace/local_setup.bash"
+    )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/michele/braccio_control/install/setup.sh")
+   "/home/michele/braccio_control/install/setup.sh;/home/michele/braccio_control/install/local_setup.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/michele/braccio_control/install" TYPE FILE FILES "/home/michele/braccio_control/build/catkin_generated/installspace/setup.sh")
+file(INSTALL DESTINATION "/home/michele/braccio_control/install" TYPE FILE FILES
+    "/home/michele/braccio_control/build/catkin_generated/installspace/setup.sh"
+    "/home/michele/braccio_control/build/catkin_generated/installspace/local_setup.sh"
+    )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/michele/braccio_control/install/setup.zsh")
+   "/home/michele/braccio_control/install/setup.zsh;/home/michele/braccio_control/install/local_setup.zsh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/michele/braccio_control/install" TYPE FILE FILES "/home/michele/braccio_control/build/catkin_generated/installspace/setup.zsh")
+file(INSTALL DESTINATION "/home/michele/braccio_control/install" TYPE FILE FILES
+    "/home/michele/braccio_control/build/catkin_generated/installspace/setup.zsh"
+    "/home/michele/braccio_control/build/catkin_generated/installspace/local_setup.zsh"
+    )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -122,7 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/michele/braccio_control/build/gtest/cmake_install.cmake")
-  include("/home/michele/braccio_control/build/model_arm_result/cmake_install.cmake")
+  include("/home/michele/braccio_control/build/model_moveit/cmake_install.cmake")
   include("/home/michele/braccio_control/build/servo_control/cmake_install.cmake")
 
 endif()
