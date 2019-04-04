@@ -1,8 +1,0 @@
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/rebuild_cache.dir
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/edit_cache.dir
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/uno_Servo.dir
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/servo.dir
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/uno_CORE.dir
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/servo-size.dir
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/servo-upload.dir
-/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/upload.dir

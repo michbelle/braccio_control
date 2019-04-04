@@ -1,8 +1,0 @@
-prefix=/home/michele/braccio_control/devel
-
-Name: model
-Description: Description of model
-Version: 0.3.0
-Cflags: 
-Libs: -L/home/michele/braccio_control/devel/lib 
-Requires: 

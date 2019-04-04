@@ -1,1 +1,0 @@
-/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions  -Wl,--gc-sections -lm -mmcu=atmega328p  CMakeFiles/servo.dir/servo.cpp.obj CMakeFiles/servo.dir/home/michele/braccio_control/build/servo_control/ros_lib/time.cpp.obj  -o /home/michele/braccio_control/devel/share/servo_control/servo.elf libuno_Servo.a libuno_CORE.a -lc -lm 

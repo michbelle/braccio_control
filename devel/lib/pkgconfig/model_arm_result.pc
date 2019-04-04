@@ -1,8 +1,0 @@
-prefix=/home/michele/braccio_control/devel
-
-Name: model_arm_result
-Description: Description of model_arm_result
-Version: 0.3.0
-Cflags: 
-Libs: -L/home/michele/braccio_control/devel/lib 
-Requires: 
