@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/usr/share/arduino/libraries/Servo/Servo.cpp
+avr/interrupt.h
+-
+Arduino.h
+-
+Servo.h
+/usr/share/arduino/libraries/Servo/Servo.h
+
+/usr/share/arduino/libraries/Servo/Servo.h
+inttypes.h
+-
+

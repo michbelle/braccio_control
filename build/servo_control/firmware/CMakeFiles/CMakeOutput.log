@@ -1,0 +1,349 @@
+The target system is: Arduino -  - 
+The host system is: Linux - 4.15.0-47-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/avr-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/3.10.2/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/avr-g++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/3.10.2/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_48825/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_48825.dir/build.make CMakeFiles/cmTC_48825.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building C object CMakeFiles/cmTC_48825.dir/testCCompiler.c.obj
+/usr/bin/avr-gcc   -g -Os       -mcall-prologues -ffunction-sections -fdata-sections    -o CMakeFiles/cmTC_48825.dir/testCCompiler.c.obj   -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_48825
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_48825.dir/link.txt --verbose=1
+/usr/bin/avr-gcc -g -Os       -mcall-prologues -ffunction-sections -fdata-sections   -Wl,--gc-sections -lm  CMakeFiles/cmTC_48825.dir/testCCompiler.c.obj  -o cmTC_48825 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_6b071/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_6b071.dir/build.make CMakeFiles/cmTC_6b071.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building C object CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj
+/usr/bin/avr-gcc   -g -Os       -mcall-prologues -ffunction-sections -fdata-sections    -o CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_6b071
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6b071.dir/link.txt --verbose=1
+/usr/bin/avr-gcc -g -Os       -mcall-prologues -ffunction-sections -fdata-sections   -Wl,--gc-sections -lm -v CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj  -o cmTC_6b071 
+Using built-in specs.
+Reading specs from /usr/lib/gcc/avr/5.4.0/device-specs/specs-avr2
+COLLECT_GCC=/usr/bin/avr-gcc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/avr/5.4.0/lto-wrapper
+Target: avr
+Configured with: ../gcc/configure -v --enable-languages=c,c++ --prefix=/usr/lib --infodir=/usr/share/info --mandir=/usr/share/man --bindir=/usr/bin --libexecdir=/usr/lib --libdir=/usr/lib --enable-shared --with-system-zlib --enable-long-long --enable-nls --without-included-gettext --disable-libssp --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=avr CFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' CPPFLAGS='-Wdate-time -D_FORTIFY_SOURCE=2' CXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' FCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' FFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' GCJFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' OBJCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' OBJCXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat '
+Thread model: single
+gcc version 5.4.0 (GCC) 
+COMPILER_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/../../../avr/bin/
+LIBRARY_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/../../../avr/lib/
+COLLECT_GCC_OPTIONS='-g' '-Os' '-mcall-prologues' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'cmTC_6b071' '-specs=device-specs/specs-avr2'
+ /usr/lib/gcc/avr/5.4.0/collect2 -plugin /usr/lib/gcc/avr/5.4.0/liblto_plugin.so -plugin-opt=/usr/lib/gcc/avr/5.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccWjBMqe.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lc --pmem-wrap-around=8k -o cmTC_6b071 -L/usr/lib/gcc/avr/5.4.0 -L/usr/lib/gcc/avr/5.4.0/../../../avr/lib --gc-sections -lm CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj --start-group -lgcc -lm -lc --end-group
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(avr-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_6b071/fast"]
+  ignore line: [make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_6b071.dir/build.make CMakeFiles/cmTC_6b071.dir/build]
+  ignore line: [make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"]
+  ignore line: [Building C object CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj]
+  ignore line: [/usr/bin/avr-gcc   -g -Os       -mcall-prologues -ffunction-sections -fdata-sections    -o CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_6b071]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6b071.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/avr-gcc -g -Os       -mcall-prologues -ffunction-sections -fdata-sections   -Wl,--gc-sections -lm -v CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj  -o cmTC_6b071 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [Reading specs from /usr/lib/gcc/avr/5.4.0/device-specs/specs-avr2]
+  ignore line: [COLLECT_GCC=/usr/bin/avr-gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/avr/5.4.0/lto-wrapper]
+  ignore line: [Target: avr]
+  ignore line: [Configured with: ../gcc/configure -v --enable-languages=c,c++ --prefix=/usr/lib --infodir=/usr/share/info --mandir=/usr/share/man --bindir=/usr/bin --libexecdir=/usr/lib --libdir=/usr/lib --enable-shared --with-system-zlib --enable-long-long --enable-nls --without-included-gettext --disable-libssp --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=avr CFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' CPPFLAGS='-Wdate-time -D_FORTIFY_SOURCE=2' CXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' FCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' FFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' GCJFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' OBJCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' OBJCXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ']
+  ignore line: [Thread model: single]
+  ignore line: [gcc version 5.4.0 (GCC) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/../../../avr/bin/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/../../../avr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-g' '-Os' '-mcall-prologues' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'cmTC_6b071' '-specs=device-specs/specs-avr2']
+  link line: [ /usr/lib/gcc/avr/5.4.0/collect2 -plugin /usr/lib/gcc/avr/5.4.0/liblto_plugin.so -plugin-opt=/usr/lib/gcc/avr/5.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccWjBMqe.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lc --pmem-wrap-around=8k -o cmTC_6b071 -L/usr/lib/gcc/avr/5.4.0 -L/usr/lib/gcc/avr/5.4.0/../../../avr/lib --gc-sections -lm CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj --start-group -lgcc -lm -lc --end-group]
+    arg [/usr/lib/gcc/avr/5.4.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/usr/lib/gcc/avr/5.4.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/usr/lib/gcc/avr/5.4.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccWjBMqe.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lm] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [--pmem-wrap-around=8k] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_6b071] ==> ignore
+    arg [-L/usr/lib/gcc/avr/5.4.0] ==> dir [/usr/lib/gcc/avr/5.4.0]
+    arg [-L/usr/lib/gcc/avr/5.4.0/../../../avr/lib] ==> dir [/usr/lib/gcc/avr/5.4.0/../../../avr/lib]
+    arg [--gc-sections] ==> ignore
+    arg [-lm] ==> lib [m]
+    arg [CMakeFiles/cmTC_6b071.dir/CMakeCCompilerABI.c.obj] ==> ignore
+    arg [--start-group] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lm] ==> lib [m]
+    arg [-lc] ==> lib [c]
+    arg [--end-group] ==> ignore
+  collapse library dir [/usr/lib/gcc/avr/5.4.0] ==> [/usr/lib/gcc/avr/5.4.0]
+  collapse library dir [/usr/lib/gcc/avr/5.4.0/../../../avr/lib] ==> [/usr/lib/avr/lib]
+  implicit libs: [m;gcc;m;c]
+  implicit dirs: [/usr/lib/gcc/avr/5.4.0;/usr/lib/avr/lib]
+  implicit fwks: []
+
+
+
+
+Detecting C [-std=c11] compiler features compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_41216/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_41216.dir/build.make CMakeFiles/cmTC_41216.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building C object CMakeFiles/cmTC_41216.dir/feature_tests.c.obj
+/usr/bin/avr-gcc   -g -Os       -mcall-prologues -ffunction-sections -fdata-sections    -std=c11 -o CMakeFiles/cmTC_41216.dir/feature_tests.c.obj   -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/feature_tests.c
+Linking C executable cmTC_41216
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_41216.dir/link.txt --verbose=1
+/usr/bin/avr-gcc -g -Os       -mcall-prologues -ffunction-sections -fdata-sections   -Wl,--gc-sections -lm  CMakeFiles/cmTC_41216.dir/feature_tests.c.obj  -o cmTC_41216 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+
+
+Detecting C [-std=c99] compiler features compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_661be/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_661be.dir/build.make CMakeFiles/cmTC_661be.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building C object CMakeFiles/cmTC_661be.dir/feature_tests.c.obj
+/usr/bin/avr-gcc   -g -Os       -mcall-prologues -ffunction-sections -fdata-sections    -std=c99 -o CMakeFiles/cmTC_661be.dir/feature_tests.c.obj   -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/feature_tests.c
+Linking C executable cmTC_661be
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_661be.dir/link.txt --verbose=1
+/usr/bin/avr-gcc -g -Os       -mcall-prologues -ffunction-sections -fdata-sections   -Wl,--gc-sections -lm  CMakeFiles/cmTC_661be.dir/feature_tests.c.obj  -o cmTC_661be 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+
+
+Detecting C [-std=c90] compiler features compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f8457/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_f8457.dir/build.make CMakeFiles/cmTC_f8457.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building C object CMakeFiles/cmTC_f8457.dir/feature_tests.c.obj
+/usr/bin/avr-gcc   -g -Os       -mcall-prologues -ffunction-sections -fdata-sections    -std=c90 -o CMakeFiles/cmTC_f8457.dir/feature_tests.c.obj   -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/feature_tests.c
+Linking C executable cmTC_f8457
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f8457.dir/link.txt --verbose=1
+/usr/bin/avr-gcc -g -Os       -mcall-prologues -ffunction-sections -fdata-sections   -Wl,--gc-sections -lm  CMakeFiles/cmTC_f8457.dir/feature_tests.c.obj  -o cmTC_f8457 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3ada0/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_3ada0.dir/build.make CMakeFiles/cmTC_3ada0.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building CXX object CMakeFiles/cmTC_3ada0.dir/testCXXCompiler.cxx.obj
+/usr/bin/avr-g++    -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions    -o CMakeFiles/cmTC_3ada0.dir/testCXXCompiler.cxx.obj -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_3ada0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3ada0.dir/link.txt --verbose=1
+/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions   -Wl,--gc-sections -lm  CMakeFiles/cmTC_3ada0.dir/testCXXCompiler.cxx.obj  -o cmTC_3ada0 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7cc59/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_7cc59.dir/build.make CMakeFiles/cmTC_7cc59.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building CXX object CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj
+/usr/bin/avr-g++    -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions    -o CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_7cc59
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7cc59.dir/link.txt --verbose=1
+/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions   -Wl,--gc-sections -lm -v CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj  -o cmTC_7cc59 
+Using built-in specs.
+Reading specs from /usr/lib/gcc/avr/5.4.0/device-specs/specs-avr2
+COLLECT_GCC=/usr/bin/avr-g++
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/avr/5.4.0/lto-wrapper
+Target: avr
+Configured with: ../gcc/configure -v --enable-languages=c,c++ --prefix=/usr/lib --infodir=/usr/share/info --mandir=/usr/share/man --bindir=/usr/bin --libexecdir=/usr/lib --libdir=/usr/lib --enable-shared --with-system-zlib --enable-long-long --enable-nls --without-included-gettext --disable-libssp --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=avr CFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' CPPFLAGS='-Wdate-time -D_FORTIFY_SOURCE=2' CXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' FCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' FFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' GCJFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' OBJCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' OBJCXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat '
+Thread model: single
+gcc version 5.4.0 (GCC) 
+COMPILER_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/../../../avr/bin/
+LIBRARY_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/../../../avr/lib/
+COLLECT_GCC_OPTIONS='-g' '-Os' '-mcall-prologues' '-ffunction-sections' '-fdata-sections' '-fno-exceptions' '-v' '-o' 'cmTC_7cc59' '-specs=device-specs/specs-avr2'
+ /usr/lib/gcc/avr/5.4.0/collect2 -plugin /usr/lib/gcc/avr/5.4.0/liblto_plugin.so -plugin-opt=/usr/lib/gcc/avr/5.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cck2Qh1k.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lc --pmem-wrap-around=8k -o cmTC_7cc59 -L/usr/lib/gcc/avr/5.4.0 -L/usr/lib/gcc/avr/5.4.0/../../../avr/lib --gc-sections CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj -lgcc -lm --start-group -lgcc -lm -lc --end-group
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(avr-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_7cc59/fast"]
+  ignore line: [make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_7cc59.dir/build.make CMakeFiles/cmTC_7cc59.dir/build]
+  ignore line: [make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"]
+  ignore line: [Building CXX object CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj]
+  ignore line: [/usr/bin/avr-g++    -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions    -o CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_7cc59]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7cc59.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions   -Wl,--gc-sections -lm -v CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj  -o cmTC_7cc59 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [Reading specs from /usr/lib/gcc/avr/5.4.0/device-specs/specs-avr2]
+  ignore line: [COLLECT_GCC=/usr/bin/avr-g++]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/avr/5.4.0/lto-wrapper]
+  ignore line: [Target: avr]
+  ignore line: [Configured with: ../gcc/configure -v --enable-languages=c,c++ --prefix=/usr/lib --infodir=/usr/share/info --mandir=/usr/share/man --bindir=/usr/bin --libexecdir=/usr/lib --libdir=/usr/lib --enable-shared --with-system-zlib --enable-long-long --enable-nls --without-included-gettext --disable-libssp --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=avr CFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' CPPFLAGS='-Wdate-time -D_FORTIFY_SOURCE=2' CXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' FCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' FFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' GCJFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong' LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' OBJCFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ' OBJCXXFLAGS='-g -O2 -fdebug-prefix-map=/build/gcc-avr-n0nSsH/gcc-avr-5.4.0+Atmel3.6.0=. -fstack-protector-strong -Wformat ']
+  ignore line: [Thread model: single]
+  ignore line: [gcc version 5.4.0 (GCC) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/:/usr/lib/gcc/avr/5.4.0/../../../avr/bin/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/avr/5.4.0/:/usr/lib/gcc/avr/5.4.0/../../../avr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-g' '-Os' '-mcall-prologues' '-ffunction-sections' '-fdata-sections' '-fno-exceptions' '-v' '-o' 'cmTC_7cc59' '-specs=device-specs/specs-avr2']
+  link line: [ /usr/lib/gcc/avr/5.4.0/collect2 -plugin /usr/lib/gcc/avr/5.4.0/liblto_plugin.so -plugin-opt=/usr/lib/gcc/avr/5.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cck2Qh1k.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lc --pmem-wrap-around=8k -o cmTC_7cc59 -L/usr/lib/gcc/avr/5.4.0 -L/usr/lib/gcc/avr/5.4.0/../../../avr/lib --gc-sections CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj -lgcc -lm --start-group -lgcc -lm -lc --end-group]
+    arg [/usr/lib/gcc/avr/5.4.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/usr/lib/gcc/avr/5.4.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/usr/lib/gcc/avr/5.4.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cck2Qh1k.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lm] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [--pmem-wrap-around=8k] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_7cc59] ==> ignore
+    arg [-L/usr/lib/gcc/avr/5.4.0] ==> dir [/usr/lib/gcc/avr/5.4.0]
+    arg [-L/usr/lib/gcc/avr/5.4.0/../../../avr/lib] ==> dir [/usr/lib/gcc/avr/5.4.0/../../../avr/lib]
+    arg [--gc-sections] ==> ignore
+    arg [CMakeFiles/cmTC_7cc59.dir/CMakeCXXCompilerABI.cpp.obj] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lm] ==> lib [m]
+    arg [--start-group] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lm] ==> lib [m]
+    arg [-lc] ==> lib [c]
+    arg [--end-group] ==> ignore
+  collapse library dir [/usr/lib/gcc/avr/5.4.0] ==> [/usr/lib/gcc/avr/5.4.0]
+  collapse library dir [/usr/lib/gcc/avr/5.4.0/../../../avr/lib] ==> [/usr/lib/avr/lib]
+  implicit libs: [gcc;m;gcc;m;c]
+  implicit dirs: [/usr/lib/gcc/avr/5.4.0;/usr/lib/avr/lib]
+  implicit fwks: []
+
+
+
+
+Detecting CXX [-std=c++1z] compiler features compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1795d/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_1795d.dir/build.make CMakeFiles/cmTC_1795d.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building CXX object CMakeFiles/cmTC_1795d.dir/feature_tests.cxx.obj
+/usr/bin/avr-g++    -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions    -std=c++1z -o CMakeFiles/cmTC_1795d.dir/feature_tests.cxx.obj -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_1795d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1795d.dir/link.txt --verbose=1
+/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions   -Wl,--gc-sections -lm  CMakeFiles/cmTC_1795d.dir/feature_tests.cxx.obj  -o cmTC_1795d 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+
+
+Detecting CXX [-std=c++14] compiler features compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_11464/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_11464.dir/build.make CMakeFiles/cmTC_11464.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building CXX object CMakeFiles/cmTC_11464.dir/feature_tests.cxx.obj
+/usr/bin/avr-g++    -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions    -std=c++14 -o CMakeFiles/cmTC_11464.dir/feature_tests.cxx.obj -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_11464
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_11464.dir/link.txt --verbose=1
+/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions   -Wl,--gc-sections -lm  CMakeFiles/cmTC_11464.dir/feature_tests.cxx.obj  -o cmTC_11464 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+
+
+Detecting CXX [-std=c++11] compiler features compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c988c/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_c988c.dir/build.make CMakeFiles/cmTC_c988c.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building CXX object CMakeFiles/cmTC_c988c.dir/feature_tests.cxx.obj
+/usr/bin/avr-g++    -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions    -std=c++11 -o CMakeFiles/cmTC_c988c.dir/feature_tests.cxx.obj -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_c988c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c988c.dir/link.txt --verbose=1
+/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions   -Wl,--gc-sections -lm  CMakeFiles/cmTC_c988c.dir/feature_tests.cxx.obj  -o cmTC_c988c 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
+
+
+Detecting CXX [-std=c++98] compiler features compiled with the following output:
+Change Dir: /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_315ec/fast"
+make[3]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+/usr/bin/make -f CMakeFiles/cmTC_315ec.dir/build.make CMakeFiles/cmTC_315ec.dir/build
+make[4]: ingresso nella directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+Building CXX object CMakeFiles/cmTC_315ec.dir/feature_tests.cxx.obj
+/usr/bin/avr-g++    -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions    -std=c++98 -o CMakeFiles/cmTC_315ec.dir/feature_tests.cxx.obj -c /home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_315ec
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_315ec.dir/link.txt --verbose=1
+/usr/bin/avr-g++  -g -Os       -mcall-prologues -ffunction-sections -fdata-sections -fno-exceptions   -Wl,--gc-sections -lm  CMakeFiles/cmTC_315ec.dir/feature_tests.cxx.obj  -o cmTC_315ec 
+make[4]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+make[3]: uscita dalla directory "/home/michele/braccio_control/build/servo_control/firmware/CMakeFiles/CMakeTmp"
+
+
