@@ -1,2 +1,0 @@
-/usr/bin/avr-ar qc libuno_Servo.a  CMakeFiles/uno_Servo.dir/usr/share/arduino/libraries/Servo/Servo.cpp.obj
-/usr/bin/avr-ranlib libuno_Servo.a

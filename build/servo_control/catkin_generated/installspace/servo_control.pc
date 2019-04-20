@@ -1,8 +1,0 @@
-prefix=/home/michele/braccio_control/install
-
-Name: servo_control
-Description: Description of servo_control
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/michele/braccio_control/install/lib 
-Requires: 
