@@ -61,7 +61,7 @@ void servo_cb(const sensor_msgs::JointState& cmd_msg){
   //Conversione corretta tra l'angolo reale e quello generato
   //4 gradi per essere ortogonale
 
-  base_angle=dato_to_real(base_angle-90)+4;
+  base_angle=dato_to_real(base_angle-90)+10;
   servo_up1_angle=dato_to_real(servo_up1_angle+90);
   servo_up2_angle=dato_to_real(servo_up2_angle+90);
   servo_up3_angle=dato_to_real(servo_up3_angle);
@@ -105,8 +105,8 @@ void setup(){
   servo_up1.write(50);
   servo_up2.write(90);
   servo_up3.write(90);
-  gripper_angle.write(90);
-  gripper_chiuso.write(55);
+  gripper_angle.write(0);
+  gripper_chiuso.write(60);
 }
 
 //loop
@@ -136,6 +136,6 @@ double gripper_control(float position_degre)
   //attualmente ha un angolo che varia tra i 55 e i 10 gradi
   position_degre=0.05-position_degre;
   position_degre=position_degre*45/0.5;
-  position_degre=position_degre+10;
+  position_degre=55-position_degre+10;
   return position_degre;
 }
