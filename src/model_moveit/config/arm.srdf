@@ -16,6 +16,8 @@
         <joint name="con_up_1" />
         <joint name="con_up_2" />
         <joint name="con_up_3" />
+        <joint name="rotation_grip" />
+        <joint name="fix_left" />
     </group>
     <group name="hand">
         <joint name="rotation_grip" />

@@ -10,3 +10,8 @@ prima del lancio di rviz bisogna adeguarsi agli americani :-(
 
 #arduino
 rosrun servo_control serial_node.py /dev/ttyACM0
+
+#Commander
+tool per comandare in terminal il braccio
+
+rosrun moveit_commander moveit_commander_cmdline.py

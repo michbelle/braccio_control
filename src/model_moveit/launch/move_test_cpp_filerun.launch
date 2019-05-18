@@ -1,0 +1,6 @@
+<launch>
+
+  <node name="move_group_interface_tutorial" pkg="joy_control" type="joy_to_arm" respawn="false" output="screen">
+  </node>
+
+</launch>

@@ -1,0 +1,6 @@
+<launch>
+
+  <node name="joy_to_arm" pkg="joy_control" type="joy_to_arm" respawn="false" output="screen">
+  </node>
+
+</launch>

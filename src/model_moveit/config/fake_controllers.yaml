@@ -5,6 +5,7 @@ controller_list:
       - con_up_1
       - con_up_2
       - con_up_3
+      - rotation_grip
   - name: fake_hand_controller
     joints:
       - rotation_grip
