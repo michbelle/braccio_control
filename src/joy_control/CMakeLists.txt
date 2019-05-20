@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(joy_control)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -10,11 +10,28 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
-  std_msgs
+  interactive_markers
+  moveit_core
+    moveit_visual_tools
+    moveit_ros_planning
+    moveit_ros_planning_interface
+    moveit_ros_perception
+    pluginlib
+    geometric_shapes
+    pcl_ros
+    pcl_conversions
+    rosbag
+    tf2_ros
+    tf2_eigen
+    tf2_geometry_msgs
+
 )
 
+
+
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(Eigen3 REQUIRED)
+find_package(Boost REQUIRED system filesystem date_time thread)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -70,7 +87,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -103,10 +120,17 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES servo_control
-#  CATKIN_DEPENDS rosserial_arduino rosserial_client std_msgs
-#  DEPENDS system_lib
+LIBRARIES
+    interactivity_utils
+  INCLUDE_DIRS
+  CATKIN_DEPENDS
+    moveit_core
+    moveit_visual_tools
+    moveit_ros_planning_interface
+    interactive_markers
+    tf2_geometry_msgs
+  DEPENDS
+    EIGEN3
 )
 
 ###########
@@ -115,14 +139,14 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-#include_directories(
+include_directories(
 # include
-#  ${catkin_INCLUDE_DIRS}
-#)
+  ${catkin_INCLUDE_DIRS}
+)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/servo_control.cpp
+#   src/${PROJECT_NAME}/joy_control.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -133,7 +157,7 @@ catkin_package(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/servo_control_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/joy_control_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -190,10 +214,14 @@ catkin_package(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_servo_control.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_joy_control.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(joy_cont src/joy_to_arm.cpp)
+target_link_libraries(joy_cont ${catkin_LIBRARIES})
+#add_dependencies(talker beginner_tutorials_generate_messages_cpp)
