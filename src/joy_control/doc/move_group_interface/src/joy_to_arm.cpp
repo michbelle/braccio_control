@@ -1,4 +1,38 @@
-/* test joy to arm*/
+/*********************************************************************
+ * Software License Agreement (BSD License)
+ *
+ *  Copyright (c) 2013, SRI International
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above
+ *     copyright notice, this list of conditions and the following
+ *     disclaimer in the documentation and/or other materials provided
+ *     with the distribution.
+ *   * Neither the name of SRI International nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *********************************************************************/
+
+/* Author: Sachin Chitta, Dave Coleman, Mike Lautman */
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
@@ -10,36 +44,25 @@
 #include <moveit_msgs/CollisionObject.h>
 
 #include <moveit_visual_tools/moveit_visual_tools.h>
-void ros_avvio(void);
-void visual_setup(void);
-void plan_def(void);
 
 int main(int argc, char** argv)
 {
-
-  ros_avvio();
-    //creazione del nodo per ROS
-
-  ros::init(argc, argv, "move_group_my_test");
+  ros::init(argc, argv, "move_group_interface_tutorial");
   ros::NodeHandle node_handle;
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
-  /*
-
-  //componenti controllabili per la simulazione senza errori
-  static double position_attuale_y=? //vedere la posizione di partenza del braccio
-  static double position_attuale_z=?
-  */
-
-  plan_def();
-
-    // MoveIt! operates on sets of joints called "planning groups" and stores them in an object called
+  // BEGIN_TUTORIAL
+  //
+  // Setup
+  // ^^^^^
+  //
+  // MoveIt! operates on sets of joints called "planning groups" and stores them in an object called
   // the `JointModelGroup`. Throughout MoveIt! the terms "planning group" and "joint model group"
   // are used interchangably.
-  static const std::string PLANNING_GROUP = "arm"; //lasciamo stare end gripper controllato direttamente da utente
+  static const std::string PLANNING_GROUP = "panda_arm";
 
-  // The :move_group_interface:`MoveGroup` class can be easily
+  // The :move_group_interface:`MoveGroupInterface` class can be easily
   // setup using just the name of the planning group you would like to control and plan for.
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
 
@@ -48,16 +71,16 @@ int main(int argc, char** argv)
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
   // Raw pointers are frequently used to refer to the planning group for improved performance.
-  const robot_state::JointModelGroup* joint_model_group = move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
+  const robot_state::JointModelGroup* joint_model_group =
+      move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
 
-  visual_setup();
-    // Visualization  //DA ELiminare non necessaria, ma utile per test
+  // Visualization
   // ^^^^^^^^^^^^^
   //
   // The package MoveItVisualTools provides many capabilties for visualizing objects, robots,
   // and trajectories in RViz as well as debugging tools such as step-by-step introspection of a script
   namespace rvt = rviz_visual_tools;
-  moveit_visual_tools::MoveItVisualTools visual_tools("my_arm");
+  moveit_visual_tools::MoveItVisualTools visual_tools("panda_link0");
   visual_tools.deleteAllMarkers();
 
   // Remote control is an introspection tool that allows users to step through a high level script
@@ -65,7 +88,7 @@ int main(int argc, char** argv)
   visual_tools.loadRemoteControl();
 
   // RViz provides many types of markers, in this demo we will use text, cylinders, and spheres
-  Eigen::Affine3d text_pose = Eigen::Affine3d::Identity();
+  Eigen::Isometry3d text_pose = Eigen::Isometry3d::Identity();
   text_pose.translation().z() = 1.75;
   visual_tools.publishText(text_pose, "MoveGroupInterface Demo", rvt::WHITE, rvt::XLARGE);
 
@@ -76,45 +99,30 @@ int main(int argc, char** argv)
   // ^^^^^^^^^^^^^^^^^^^^^^^^^
   //
   // We can print the name of the reference frame for this robot.
-  ROS_INFO_NAMED("tutorial", "Reference frame: %s", move_group.getPlanningFrame().c_str());
+  ROS_INFO_NAMED("tutorial", "Planning frame: %s", move_group.getPlanningFrame().c_str());
 
   // We can also print the name of the end-effector link for this group.
   ROS_INFO_NAMED("tutorial", "End effector link: %s", move_group.getEndEffectorLink().c_str());
 
-  while(1)
-  {
-    
-  }
+  // We can get a list of all the groups in the robot:
+  ROS_INFO_NAMED("tutorial", "Available Planning Groups:");
+  std::copy(move_group.getJointModelGroupNames().begin(), move_group.getJointModelGroupNames().end(),
+            std::ostream_iterator<std::string>(std::cout, ", "));
 
   // Start the demo
   // ^^^^^^^^^^^^^^^^^^^^^^^^^
   visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to start the demo");
 
-  // Planning to a Pose goal //qui devo prendere la direzione del controller
+  // Planning to a Pose goal
   // ^^^^^^^^^^^^^^^^^^^^^^^
   // We can plan a motion for this group to a desired pose for the
   // end-effector.
-  /*
   geometry_msgs::Pose target_pose1;
   target_pose1.orientation.w = 1.0;
   target_pose1.position.x = 0.28;
   target_pose1.position.y = -0.2;
   target_pose1.position.z = 0.5;
   move_group.setPoseTarget(target_pose1);
-  */
-  geometry_msgs::Pose target_pose1;
-  //target_pose1.orientation.w = 1.0;
-  //target_pose1.position.x = 0.28;
-  target_pose1.position.y = -0.01;
-  //target_pose1.position.z = 0.5;
-  move_group.setPoseTarget(target_pose1);
-
-  /*
-  //qui devo prendere la direzione del controller
-  target_pose1.position.y = axis.position[]-position_attuale_y;
-  target_pose1.position.z = axis.position[]-position_attuale_z;
-  
-  */
 
   // Now, we call the planner to compute the plan and visualize it.
   // Note that we are just planning, not asking move_group
@@ -125,7 +133,7 @@ int main(int argc, char** argv)
 
   ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (pose goal) %s", success ? "" : "FAILED");
 
-  // Visualizing plans  //da rimuovere 
+  // Visualizing plans
   // ^^^^^^^^^^^^^^^^^
   // We can also visualize the plan as a line with markers in RViz.
   ROS_INFO_NAMED("tutorial", "Visualizing plan 1 as trajectory line");
@@ -233,19 +241,16 @@ int main(int argc, char** argv)
   // When done with the path constraint be sure to clear it.
   move_group.clearPathConstraints();
 
-  // Since we set the start state we have to clear it before planning other paths
-  move_group.setStartStateToCurrentState();
-
   // Cartesian Paths
   // ^^^^^^^^^^^^^^^
   // You can plan a Cartesian path directly by specifying a list of waypoints
   // for the end-effector to go through. Note that we are starting
   // from the new start state above.  The initial pose (start state) does not
   // need to be added to the waypoint list but adding it can help with visualizations
-  geometry_msgs::Pose target_pose3 = move_group.getCurrentPose().pose;
-
   std::vector<geometry_msgs::Pose> waypoints;
-  waypoints.push_back(target_pose3);
+  waypoints.push_back(start_pose2);
+
+  geometry_msgs::Pose target_pose3 = start_pose2;
 
   target_pose3.position.z -= 0.2;
   waypoints.push_back(target_pose3);  // down
@@ -387,20 +392,3 @@ int main(int argc, char** argv)
   ros::shutdown();
   return 0;
 }
-
-void ros_avvio(){
-  
-
-}
-
-void plan_definizione(){
-
-
-  
-}
-
-
-void visual_setup(){
-  
-}
-
