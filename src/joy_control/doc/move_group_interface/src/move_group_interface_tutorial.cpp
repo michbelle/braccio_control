@@ -65,6 +65,7 @@ int main(int argc, char** argv)
   // The :move_group_interface:`MoveGroupInterface` class can be easily
   // setup using just the name of the planning group you would like to control and plan for.
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
+  //moveit::planning_interface::MoveGroupInterface group(PLANNING_GROUP);
 
   // We will use the :planning_scene_interface:`PlanningSceneInterface`
   // class to add and remove collision objects in our "virtual world" scene
@@ -73,6 +74,11 @@ int main(int argc, char** argv)
   // Raw pointers are frequently used to refer to the planning group for improved performance.
   const robot_state::JointModelGroup* joint_model_group =
       move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
+
+  //group.getCurrentPose();
+
+
+
 
   // Visualization
   // ^^^^^^^^^^^^^
@@ -94,6 +100,10 @@ int main(int argc, char** argv)
 
   // Batch publishing is used to reduce the number of messages being sent to RViz for large visualizations
   visual_tools.trigger();
+
+    
+  ROS_INFO_NAMED("tutorial", "Actual position: %f", move_group.getCurrentPose().pose.position.x) ;
+
 
   // Getting Basic Information
   // ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,12 +127,18 @@ int main(int argc, char** argv)
   // ^^^^^^^^^^^^^^^^^^^^^^^
   // We can plan a motion for this group to a desired pose for the
   // end-effector.
-  geometry_msgs::Pose target_pose1;
-  target_pose1.orientation.w = 1.0;
-  target_pose1.position.x = 0.28;
-  target_pose1.position.y = -0.2;
-  target_pose1.position.z = 0.5;
-  move_group.setPoseTarget(target_pose1);
+  ROS_INFO_NAMED("tutorial", "Actual position_x: %f", move_group.getCurrentPose().pose.position.x) ;
+  ROS_INFO_NAMED("tutorial", "Actual position_y: %f", move_group.getCurrentPose().pose.position.y) ;
+  ROS_INFO_NAMED("tutorial", "Actual position_z: %f", move_group.getCurrentPose().pose.position.z) ;
+
+  geometry_msgs::Pose position_joy;
+  position_joy=move_group.getCurrentPose().pose;
+  position_joy.position.x = position_joy.position.x+0.001;
+  //position_joy.position.y = position_joy.position.y+0.001;
+  //position_joy.position.z = position_joy.position.z+0.001;
+  move_group.setPoseTarget(position_joy);
+
+  
 
   // Now, we call the planner to compute the plan and visualize it.
   // Note that we are just planning, not asking move_group
@@ -137,12 +153,10 @@ int main(int argc, char** argv)
   // ^^^^^^^^^^^^^^^^^
   // We can also visualize the plan as a line with markers in RViz.
   ROS_INFO_NAMED("tutorial", "Visualizing plan 1 as trajectory line");
-  visual_tools.publishAxisLabeled(target_pose1, "pose1");
+  visual_tools.publishAxisLabeled(position_joy, "pose1");
   visual_tools.publishText(text_pose, "Pose Goal", rvt::WHITE, rvt::XLARGE);
   visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
-  visual_tools.trigger();
-  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
-
+  
   // Moving to a pose goal
   // ^^^^^^^^^^^^^^^^^^^^^
   //
@@ -155,7 +169,15 @@ int main(int argc, char** argv)
   // and report success on execution of a trajectory.
 
   /* Uncomment below line when working with a real robot */
-  /* move_group.move(); */
+  move_group.move();
+
+  ROS_INFO_NAMED("tutorial", "Actual position_x: %f", move_group.getCurrentPose().pose.position.x) ;
+  ROS_INFO_NAMED("tutorial", "Actual position_y: %f", move_group.getCurrentPose().pose.position.y) ;
+  ROS_INFO_NAMED("tutorial", "Actual position_z: %f", move_group.getCurrentPose().pose.position.z) ;
+
+  visual_tools.trigger();
+  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
+
 
   // Planning to a joint-space goal
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -166,6 +188,8 @@ int main(int argc, char** argv)
   // To start, we'll create an pointer that references the current robot's state.
   // RobotState is the object that contains all the current position/velocity/acceleration data.
   moveit::core::RobotStatePtr current_state = move_group.getCurrentState();
+
+  
   //
   // Next get the current set of joint values for the group.
   std::vector<double> joint_group_positions;
@@ -220,7 +244,7 @@ int main(int argc, char** argv)
 
   // Now we will plan to the earlier pose target from the new
   // start state that we have just created.
-  move_group.setPoseTarget(target_pose1);
+  move_group.setPoseTarget(position_joy);
 
   // Planning with constraints can be slow because every sample must call an inverse kinematics solver.
   // Lets increase the planning time from the default 5 seconds to be sure the planner has enough time to succeed.
@@ -232,7 +256,7 @@ int main(int argc, char** argv)
   // Visualize the plan in RViz
   visual_tools.deleteAllMarkers();
   visual_tools.publishAxisLabeled(start_pose2, "start");
-  visual_tools.publishAxisLabeled(target_pose1, "goal");
+  visual_tools.publishAxisLabeled(position_joy, "goal");
   visual_tools.publishText(text_pose, "Constrained Goal", rvt::WHITE, rvt::XLARGE);
   visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
   visual_tools.trigger();
