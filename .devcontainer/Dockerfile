@@ -122,6 +122,9 @@ RUN apt update && apt-get upgrade -y && apt install -y vim tmux \
 
 RUN mkdir -p /braccio_control
 
+RUN apt update \
+    && apt install ros-kilted-ros2-control ros-kilted-ros2-controllers
+
 # RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # RUN --mount=type=ssh git clone -b master git@github.com:michbelle/braccio_control.git /braccio_control
