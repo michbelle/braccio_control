@@ -1,0 +1,7 @@
+{
+    "cmake.ignoreCMakeListsMissing": true,
+    "ROS2.distro": "kilted",
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/kilted/lib/python3.12/site-packages"
+    ]
+}
