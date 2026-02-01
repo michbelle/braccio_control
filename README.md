@@ -52,3 +52,8 @@ share x with:
 ```bash
 xhost local:root
 ```
+
+
+```
+colcon build --symlink-install --packages-select braccio_simulation
+```

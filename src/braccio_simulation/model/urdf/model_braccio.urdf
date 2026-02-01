@@ -1,0 +1,354 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="braccio">
+
+  <link name="world"/>
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+  <gazebo reference="base_link" >
+    <!-- other properties you want to define for the base link -->
+    <kinematic> true </kinematic>
+  </gazebo>
+
+
+  <xacro:property name="pi2" value="1.570796327" /> 
+  <xacro:arg name="namespace" default="braccio"/>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.088 0.090 0.029"/>
+      </geometry> 
+      <origin rpy="0 0 0" xyz="0 0 0.0145"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.088 0.090 0.029"/>
+      </geometry> 
+      <origin rpy="0 0 0" xyz="0 0 0.0145"/>
+    </collision>
+  </link>
+
+  <link name="base_up">
+    <visual>
+      <geometry>
+        <box size="0.059 0.026 0.050"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.059 0.026 0.050"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="baseup_link" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_up"/>
+    <origin xyz="-0.0145 0 0.054"/>
+  </joint>
+
+  
+  <link name="servo_rotz">
+    <visual>
+      <geometry>
+        <box size="0.058 0.050 0.026"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.002 0.012 0.013"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.058 0.050 0.026"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.002 0.012 0.013"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="servo_link2" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+    <parent link="base_up"/>
+    <child link="servo_rotz"/>
+    <origin xyz="-0.012 0 0.025"/>
+  </joint>
+
+
+  <link name="connection_servo12">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find braccio_simulation)/model/3Dparts/ModelARM-Body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 -${pi2}" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find braccio_simulation)/model/3Dparts/ModelARM-Body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 -${pi2}" xyz="0.0 0 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="con_up_1" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+    <parent link="servo_rotz"/>
+    <child link="connection_servo12"/>
+    <origin xyz="0.011 0.013 0.014"/>
+  </joint>
+
+
+  <link name="connection_servo12_2">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find braccio_simulation)/model/3Dparts/ModelARM-Body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="${pi} 0 -${pi2}" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find braccio_simulation)/model/3Dparts/ModelARM-Body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="${pi} 0 -${pi2}" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="con_up_1_2" type="fixed">
+    <parent link="connection_servo12"/>
+    <child link="connection_servo12_2"/>
+    <origin xyz="0.106 0.0 0.0"/>
+  </joint>
+
+  <link name="middle2servo">
+    <visual>
+      <geometry>
+        <box size="0.13 0.050 0.028"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.045 -0.001 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.13 0.050 0.028"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.045 -0.001 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="con_up_2" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+    <parent link="connection_servo12_2"/>
+    <child link="middle2servo"/>
+    <origin xyz="0.0 0.0 0"/>
+  </joint>
+
+  <link name="supportLastservo">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find braccio_simulation)/model/3Dparts/ModelARM-Body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 -${pi2}" xyz="0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find braccio_simulation)/model/3Dparts/ModelARM-Body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 -${pi2}" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="lastrot" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+    <parent link="middle2servo"/>
+    <child link="supportLastservo"/>
+    <origin xyz="0.091 0 0"/>
+  </joint>
+
+
+  <link name="servoRot">
+    <visual>
+      <geometry>
+        <box size="0.042 0.042 0.021"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+    <!-- <collision>
+      <geometry>
+        <box size="0.042 0.042 0.021"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.047 0 0.0145"/>
+    </collision> -->
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="supServoRot" type="fixed">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+    <parent link="supportLastservo"/>
+    <child link="servoRot"/>
+    <origin xyz="0.042 0 0"/>
+  </joint>
+
+  <link name="servo_arm_rotation">
+    <visual>
+      <geometry>
+        <box size="0.053 0.055 0.019"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0265 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.053 0.055 0.019"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0265 0 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+ <joint name="con_up_3" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+    <parent link="servoRot"/>
+    <child link="servo_arm_rotation"/>
+    <origin xyz="0.028 -0.011 0"/>
+  </joint>
+
+
+  <link name="gripper_motor">
+    <visual>
+      <geometry>
+        <box size="0.020 0.050 0.033"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.03 0.025 0.0165"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.020 0.050 0.033"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.03 0.025 0.0165"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+ <joint name="rotation_grip" type="fixed">
+    <parent link="servo_arm_rotation"/>
+    <child link="gripper_motor"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <link name="left_g">
+    <visual>
+      <geometry>
+        <box size="0.058 0.010 0.020"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.029 0.005 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.058 0.010 0.020"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.029 0.005 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+ <joint name="grip" type="prismatic">
+    <axis xyz="0 1 0"/>
+    <limit
+      lower="0"
+      upper="0.30"
+      velocity="2.0"
+      effort="1000" />
+    <parent link="servo_arm_rotation"/>
+    <child link="left_g"/>
+    <origin xyz="0.052 0 0"/>
+  </joint>
+
+  <link name="right_g">
+    <visual>
+      <geometry>
+        <box size="0.058 0.010 0.020"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.029 -0.005 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.058 0.010 0.020"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.029 -0.005 0"/>
+    </collision>
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.1" />
+        <inertia ixx="0.001" ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+ <joint name="plan_move" type="prismatic">
+    <axis xyz="0 -1 0"/>
+    <limit
+      lower="0"
+      upper="0.03"
+      velocity="2.0"
+      effort="1000" />
+    <parent link="servo_arm_rotation"/>
+    <child link="right_g"/>
+    <origin xyz="0.052 0 0"/>
+    <mimic 
+      joint="grip"
+      multiplier="1"
+      offset="0" />
+  </joint>
+
+</robot>
