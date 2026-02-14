@@ -1,0 +1,3 @@
+
+#define ESP_WIFI_SSID "SSID"
+#define ESP_WIFI_PASS "PASS"

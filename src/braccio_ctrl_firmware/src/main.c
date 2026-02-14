@@ -54,7 +54,7 @@ void servo_pwm_drive(pca9685_dev_t dev, uint8_t servo_no, float d_cycle_ms)
         ESP_LOGE(TAG, "Servo drive: ERROR!");
 }
 
-void app_main(void)
+void app_main2(void)
 {
     esp_err_t err = ESP_OK;
 
