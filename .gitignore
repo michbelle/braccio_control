@@ -4,3 +4,79 @@ log
 .vscode/browse.vc.db-shm
 .vscode/browse.vc.db
 .vscode/browse.vc.db-wal
+
+src/test_zenoh/CMakeCache.txt
+src/test_zenoh/cmake_install.cmake
+src/test_zenoh/Makefile
+src/test_zenoh/test_sub
+
+
+# CMake
+build
+crossbuilds
+CMakeFiles
+compile_commands.json
+
+# vscode
+# .vscode 
+
+# IntelliJ / CLion 
+.idea 
+cmake-build-debug
+cmake-build-release 
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+*.sarif
+.gdb_history
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+.cache

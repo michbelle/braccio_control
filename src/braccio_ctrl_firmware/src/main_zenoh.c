@@ -18,15 +18,21 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/event_groups.h>
 #include <freertos/task.h>
-#include <nvs_flash.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include <wifi_connection.h>
-#include <zenoh_base.h>
 
+#include <wifi_connection.h>
+#include <zenoh-pico.h>
+
+#define Z_FEATURE_SUBSCRIPTION 1
+
+// #define MODE "client"
+// #define LOCATOR ""  // If empty, it will scout
+#define MODE "peer"
+#define LOCATOR "tcp/224.0.0.225:7447"
 
 #define KEYEXPR "braccio_control/position/**"
 
@@ -43,6 +49,48 @@ void data_handler(z_loaned_sample_t* sample, void* arg) {
 
 
 void app_main() {
+
+    // -----------------
+    // init communication protocol
+    // -----------------
+    
+    printf("Connecting to device...");
+    init_communication_wifi();
+    while (!comm_is_connected) {
+        printf(".");
+        sleep(1);
+    }
+    printf("OK!\n");
+
+    // -----------------
+    // Zenoh part
+    // -----------------
+
+    // Initialize Zenoh Session and other parameters
+    z_owned_config_t config;
+    z_config_default(&config);
+    zp_config_insert(z_loan_mut(config), Z_CONFIG_MODE_KEY, MODE);
+    if (strcmp(LOCATOR, "") != 0) {
+        if (strcmp(MODE, "client") == 0) {
+            zp_config_insert(z_loan_mut(config), Z_CONFIG_CONNECT_KEY, LOCATOR);
+        } else {
+            zp_config_insert(z_loan_mut(config), Z_CONFIG_LISTEN_KEY, LOCATOR);
+        }
+    }
+
+    z_owned_session_t s;
+
+    // Open Zenoh session
+    printf("Opening Zenoh Session...");
+    if (z_open(&s, z_move(config), NULL) < 0) {
+        printf("Unable to open session!\n");
+        exit(-1);
+    }
+    printf("OK\n");
+
+    // Start the receive and the session lease loop for zenoh-pico
+    zp_start_read_task(z_loan_mut(s), NULL);
+    zp_start_lease_task(z_loan_mut(s), NULL);
 
     printf("Declaring Subscriber on '%s'...", KEYEXPR);
     z_owned_closure_sample_t callback;
