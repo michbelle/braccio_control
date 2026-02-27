@@ -26,25 +26,51 @@ static int msg_nb = 0;
 
 static int parse_args(int argc, char **argv, z_owned_config_t *config, char **keyexpr, int *n);
 
+typedef struct position_motor{
+    float rot1;
+    float arm1_up;
+    float arm2_up;
+    float arm3_up;
+    float rot_grasp;
+    float grasp;
+} position_motor;
+
+
+position_motor ctrl_position_motor;
+
+
 void data_handler(z_loaned_sample_t *sample, void *ctx) {
     (void)(ctx);
+    printf("qwe\n");
     z_view_string_t keystr;
     z_keyexpr_as_view_string(z_sample_keyexpr(sample), &keystr);
-    z_owned_string_t value;
-    z_bytes_to_string(z_sample_payload(sample), &value);
-    printf(">> [Subscriber] Received ('%.*s': '%.*s')\n", (int)z_string_len(z_loan(keystr)),
-           z_string_data(z_loan(keystr)), (int)z_string_len(z_loan(value)), z_string_data(z_loan(value)));
-    z_drop(z_move(value));
-    msg_nb++;
+    const z_loaned_bytes_t * payload = z_sample_payload(sample);
+    // float ctrl_position_motor;
+    // ze_deserialize_float(payload, &ctrl_position_motor);
+    // printf("%f\n",ctrl_position_motor);
+    ze_deserializer_t data = ze_deserializer_from_bytes(payload);
+    ze_deserializer_deserialize_float(&data, &ctrl_position_motor.rot1);
+    printf("%f\n",ctrl_position_motor.rot1);
+    ze_deserializer_deserialize_float(&data, &ctrl_position_motor.arm1_up);
+    printf("%f\n",ctrl_position_motor.arm1_up);
+    ze_deserializer_deserialize_float(&data, &ctrl_position_motor.arm2_up);
+    printf("%f\n",ctrl_position_motor.arm2_up);
+    ze_deserializer_deserialize_float(&data, &ctrl_position_motor.arm3_up);
+    printf("%f\n",ctrl_position_motor.arm3_up);
+    ze_deserializer_deserialize_float(&data, &ctrl_position_motor.rot_grasp);
+    printf("%f\n",ctrl_position_motor.rot_grasp);
+    ze_deserializer_deserialize_float(&data, &ctrl_position_motor.grasp);
+    printf("%f\n",ctrl_position_motor.grasp);
+    printf("end\n");
 }
 
 int main(int argc, char **argv) {
-    char *keyexpr = "demo/example/**";
-    int n = 10;
+    char *keyexpr = "demo/example/test";
+    int n = 0;
 
     z_owned_config_t config;
     z_config_default(&config);
-    zp_config_insert(z_loan_mut(config), Z_CONFIG_MODE_KEY, "peer");
+    // zp_config_insert(z_loan_mut(config), Z_CONFIG_MODE_KEY, "peer");
     // zp_config_insert(z_loan_mut(config), Z_CONFIG_LISTEN_KEY, "tcp/224.0.0.225:7447");
 
     int ret = parse_args(argc, argv, &config, &keyexpr, &n);
@@ -91,7 +117,7 @@ int main(int argc, char **argv) {
 
     printf("Press CTRL-C to quit...\n");
     while (1) {
-        if ((n != 0) && (msg_nb >= n)) {
+        if ((n != 0) && (msg_nb > n)) {
             break;
         }
         sleep(1);

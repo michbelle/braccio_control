@@ -7,7 +7,7 @@ def read_temp():
 
 if __name__ == "__main__":
     with zenoh.open(zenoh.Config()) as session:
-        key = 'myhome/kitchen/temp'
+        key = 'demo/example/test'
         pub = session.declare_publisher(key)
         while True:
             t = read_temp()
