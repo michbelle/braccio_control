@@ -2,12 +2,13 @@
 
 #define ESP_MAXIMUM_RETRY 5
 #define WIFI_CONNECTED_BIT BIT0
+#define WIFI_FAIL_BIT BIT1
 
-// bool comm_is_connected = false;
 static EventGroupHandle_t s_event_group_handler;
 static int s_retry_count = 0;
+uint8_t comm_is_connected = false;
 
-static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data) {
+void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data) {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
         esp_wifi_connect();
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
@@ -22,7 +23,7 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
 }
 
 // Set WiFi in STA mode and trigger attachment
-void init_communication_wifi(void){
+int init_communication_wifi(void){
 
     //nvs esp support
     esp_err_t ret = nvs_flash_init();
@@ -61,10 +62,17 @@ void init_communication_wifi(void){
     EventBits_t bits = xEventGroupWaitBits(s_event_group_handler, WIFI_CONNECTED_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
 
     if (bits & WIFI_CONNECTED_BIT) {
-        comm_is_connected = true;
+        comm_is_connected = 1;
+        printf("connected to ap SSID\n");
+    } else if (bits & WIFI_FAIL_BIT) {
+        printf("Failed to connect to SSID\n");
+    } else {
+        printf("UNEXPECTED EVENT\n");
     }
 
     ESP_ERROR_CHECK(esp_event_handler_instance_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, handler_got_ip));
     ESP_ERROR_CHECK(esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, handler_any_id));
     vEventGroupDelete(s_event_group_handler);
+    if (comm_is_connected==1) return 1;
+    else return -1; 
 }

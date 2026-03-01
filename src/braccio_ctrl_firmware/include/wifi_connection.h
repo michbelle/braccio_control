@@ -11,12 +11,11 @@ extern "C" {
 #include <nvs_flash.h>
 
 
-static bool comm_is_connected = false;
 
-static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data);
+void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data);
 // static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data);
 
-void init_communication_wifi(void);
+int init_communication_wifi(void);
 
 
 #ifdef __cplusplus

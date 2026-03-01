@@ -25,3 +25,12 @@ duticycle:
 - arm_rot
     - r : 0.6ms
     - l: : 2.2ms
+
+
+# with ROS
+https://github.com/Pico-ROS
+
+raspi with zenohpico
+https://zenoh.io/blog/2025-01-08-introducing-raspberry-pi-pico-support-in-zenoh-pico/
+
+zenohd -l serial//dev/ttyACM0#baudrate=112500

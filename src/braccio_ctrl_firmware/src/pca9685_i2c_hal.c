@@ -34,12 +34,19 @@
 /* Hardware Specific Components */
 
 /*  I2C User Defines  */
-#define I2C_MASTER_SDA_IO 21 //gpio pin for sda
-#define I2C_MASTER_SCL_IO 22 //gpio pin for scl
-#define I2C_MASTER_FREQ_HZ 1000 //herz
-#define I2C_MASTER_NUM              I2C_NUM_0
-
-
+#if ESP_BOARD_M == 6
+    #define I2C_MASTER_SDA_IO 8 // gpio pin for sda
+    #define I2C_MASTER_SCL_IO 6 // gpio pin for scl
+    #define I2C_MASTER_FREQ_HZ 1000 //herz
+    #define I2C_MASTER_NUM              I2C_NUM_0
+#elif ESP_BOARD_M == 1
+    #define I2C_MASTER_SDA_IO 21 // gpio pin for sda
+    #define I2C_MASTER_SCL_IO 22 // gpio pin for scl
+    #define I2C_MASTER_FREQ_HZ 1000 //herz
+    #define I2C_MASTER_NUM              I2C_NUM_0
+#else 
+    #error "no esp32 board selected"
+#endif
 
 i2c_master_bus_handle_t bus_handle;
 

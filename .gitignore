@@ -9,7 +9,9 @@ src/test_zenoh/CMakeCache.txt
 src/test_zenoh/cmake_install.cmake
 src/test_zenoh/Makefile
 src/test_zenoh/test_sub
+src/test_zenoh/test_sub2
 
+__pycache__
 
 # CMake
 build
