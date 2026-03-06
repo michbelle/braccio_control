@@ -39,9 +39,9 @@ def generate_launch_description():
             " ",
             PathJoinSubstitution(
                 [
-                    FindPackageShare("ros2_control_demo_example_7"),
+                    FindPackageShare("braccio_control"),
                     "urdf",
-                    "r6bot.urdf.xacro",
+                    "braccio.urdf.xacro",
                 ]
             ),
         ]
@@ -50,13 +50,13 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("ros2_control_demo_example_7"),
+            FindPackageShare("braccio_control"),
             "config",
-            "r6bot_controller.yaml",
+            "braccio_controller.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_description"), "r6bot/rviz", "view_robot.rviz"]
+        [FindPackageShare("braccio_control"), "rviz", "view_robot.rviz"]
     )
 
     control_node = Node(
@@ -91,7 +91,7 @@ def generate_launch_description():
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["r6bot_controller", "--param-file", robot_controllers],
+        arguments=["braccio_controller", "--param-file", robot_controllers],
     )
 
     # Delay rviz start after `joint_state_broadcaster`
