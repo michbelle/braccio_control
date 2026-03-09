@@ -26,6 +26,12 @@
 #include "esp_err.h"
 
 //////////////////////////////////////
+/*  GPIO components  */
+#include "driver/gpio.h"
+#define EM_PB     GPIO_NUM_32
+#define RUN_PB  GPIO_NUM_36
+
+//////////////////////////////////////
 /*  PCA9685 components  */
 #include "pca9685_i2c.h"
 #include "pca9685_i2c_hal.h"
@@ -105,18 +111,25 @@ typedef struct position_motor{
 } position_motor;
 
 
+
+uint8_t state = 0;
+uint8_t receiving_msg=0;
+uint8_t em_ok = 0;
+uint8_t enable_pb = 0;
+
+lock_t l;
 position_motor ctrl_position_motor;
-uint8_t booting = 0;
 unsigned long last_time_event = 0;
 
 void data_handler(z_loaned_sample_t* sample, void* arg) {
-    booting = 1;
     z_view_string_t keystr;
     z_keyexpr_as_view_string(z_sample_keyexpr(sample), &keystr);
     const z_loaned_bytes_t * payload = z_sample_payload(sample);
     // float ctrl_position_motor;
     // ze_deserialize_float(payload, &ctrl_position_motor);
     // printf("%f\n",ctrl_position_motor);
+    lock(l);
+    receiving_msg = 1;
     ze_deserializer_t data = ze_deserializer_from_bytes(payload);
     ze_deserializer_deserialize_float(&data, &ctrl_position_motor.rot1);
     ze_deserializer_deserialize_float(&data, &ctrl_position_motor.arm1_up);
@@ -130,7 +143,7 @@ void data_handler(z_loaned_sample_t* sample, void* arg) {
                                      ctrl_position_motor.arm3_up,
                                      ctrl_position_motor.rot_grasp,
                                      ctrl_position_motor.grasp);
-
+    unlock(l);
 }
 
 //////////////////////////////////////
@@ -209,6 +222,13 @@ float conv_ctrl_grasp(float open_graps){
 //////////////////////////////////////
 
 void app_main() {
+
+    // -----------------
+    // init "safety"
+    // -----------------
+
+    gpio_set_direction(EM_PB, GPIO_MODE_INPUT);
+    gpio_set_direction(RUN_PB, GPIO_MODE_INPUT);
 
     // -----------------
     // init communication protocol
@@ -336,31 +356,64 @@ void app_main() {
     int cnt = 0;
 
     while (1) {
-        if (booting==0){
-            printf("waiting at least publisher\n");
-            vTaskDelay( 500/*ms*/ / portTICK_PERIOD_MS);
-        }else if (booting==3){
-            printf("no new data received from a lot of time\n");
-            pca9685_i2c_all_led_pwm_set(pca9685_1, 0, 0);
-        }
-        else{
-            servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_0, conv_ctrl_rot1(ctrl_position_motor.rot1));
-            servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_1, conv_ctrl_arm1_up(ctrl_position_motor.arm1_up));
-            servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_2, conv_ctrl_arm2_up(ctrl_position_motor.arm2_up));
-            servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_4, conv_ctrl_arm3_up(ctrl_position_motor.arm3_up));
-            servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_5, conv_ctrl_rot_grasp(ctrl_position_motor.rot_grasp));
-            servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_6, conv_ctrl_grasp(ctrl_position_motor.grasp));
-            pca9685_i2c_hal_ms_delay(200);
-            if (booting == 1){
-                booting = 2;
-                cnt=0;
-            }else if (booting == 2){
-                cnt+=1;
-            }
-            if (cnt>10){
-                booting = 3;
-            }
-            
+        em_ok = gpio_get_level(GPIO_NUM_1);
+        enable_pb = gpio_get_level(GPIO_NUM_2);
+        switch (state){
+            case 0:
+                vTaskDelay( 500/*ms*/ / portTICK_PERIOD_MS);
+                if (em_ok==0){
+                    printf("emergency button pressed\n");
+                    break;
+                }
+                if (receiving_msg==0){
+                    printf("waiting msg\n");
+                }else if(receiving_msg==1){
+                    state = 1;
+                }else{
+                    printf("unknow\n");
+                }
+                break;
+            case 1:
+                printf("waiting pressing start button\n");
+                vTaskDelay( 500/*ms*/ / portTICK_PERIOD_MS);
+                if (em_ok==0){
+                    printf("emergency button pressed\n");
+                    state=0;
+                    break;
+                }
+                if (enable_pb==1){
+                    state = 2;
+                }
+                break;
+            case 2:
+                if (em_ok==0){
+                    printf("emergency button pressed\n");
+                    state=0;
+                    break;
+                }
+                lock(l);
+                receiving_msg=0;
+                servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_0, conv_ctrl_rot1(ctrl_position_motor.rot1));
+                servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_1, conv_ctrl_arm1_up(ctrl_position_motor.arm1_up));
+                servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_2, conv_ctrl_arm2_up(ctrl_position_motor.arm2_up));
+                servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_4, conv_ctrl_arm3_up(ctrl_position_motor.arm3_up));
+                servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_5, conv_ctrl_rot_grasp(ctrl_position_motor.rot_grasp));
+                servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_6, conv_ctrl_grasp(ctrl_position_motor.grasp));
+                pca9685_i2c_hal_ms_delay(200);
+                unlock(l);
+                if (receiving_msg == 1){
+                    cnt=0;
+                }else if (receiving_msg == 0){
+                    cnt+=1;
+                    if (cnt>10){
+                        printf("too much time is passed from the last message\n");
+                        state = 0;
+                    }
+                }
+                break;
+        
+            default:
+                break;
         }
     }
 
