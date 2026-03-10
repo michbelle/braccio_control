@@ -117,7 +117,6 @@ uint8_t receiving_msg=0;
 uint8_t em_ok = 0;
 uint8_t enable_pb = 0;
 
-lock_t l;
 position_motor ctrl_position_motor;
 unsigned long last_time_event = 0;
 
@@ -128,7 +127,6 @@ void data_handler(z_loaned_sample_t* sample, void* arg) {
     // float ctrl_position_motor;
     // ze_deserialize_float(payload, &ctrl_position_motor);
     // printf("%f\n",ctrl_position_motor);
-    lock(l);
     receiving_msg = 1;
     ze_deserializer_t data = ze_deserializer_from_bytes(payload);
     ze_deserializer_deserialize_float(&data, &ctrl_position_motor.rot1);
@@ -143,7 +141,6 @@ void data_handler(z_loaned_sample_t* sample, void* arg) {
                                      ctrl_position_motor.arm3_up,
                                      ctrl_position_motor.rot_grasp,
                                      ctrl_position_motor.grasp);
-    unlock(l);
 }
 
 //////////////////////////////////////
@@ -358,6 +355,12 @@ void app_main() {
     while (1) {
         em_ok = gpio_get_level(GPIO_NUM_1);
         enable_pb = gpio_get_level(GPIO_NUM_2);
+        printf("em ok %d,enable pb  %d", em_ok, enable_pb);
+        /*
+        TODO test gpio
+        */
+       em_ok=1;
+       enable_pb=1;
         switch (state){
             case 0:
                 vTaskDelay( 500/*ms*/ / portTICK_PERIOD_MS);
@@ -391,7 +394,6 @@ void app_main() {
                     state=0;
                     break;
                 }
-                lock(l);
                 receiving_msg=0;
                 servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_0, conv_ctrl_rot1(ctrl_position_motor.rot1));
                 servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_1, conv_ctrl_arm1_up(ctrl_position_motor.arm1_up));
@@ -400,7 +402,6 @@ void app_main() {
                 servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_5, conv_ctrl_rot_grasp(ctrl_position_motor.rot_grasp));
                 servo_pwm_drive(pca9685_1, SERVO_OUTPUT_PIN_6, conv_ctrl_grasp(ctrl_position_motor.grasp));
                 pca9685_i2c_hal_ms_delay(200);
-                unlock(l);
                 if (receiving_msg == 1){
                     cnt=0;
                 }else if (receiving_msg == 0){
