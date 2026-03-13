@@ -1,6 +1,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="braccio">
 
-  <link name="world"/>
+
+  <!-- <link name="world"/>
 
   <joint name="world_joint" type="fixed">
     <parent link="world"/>
@@ -9,9 +10,9 @@
   </joint>
 
   <gazebo reference="base_link" >
-    <!-- other properties you want to define for the base link -->
+    other properties you want to define for the base link
     <kinematic> true </kinematic>
-  </gazebo>
+  </gazebo> -->
 
 
   <xacro:property name="pi2" value="1.570796327" /> 
