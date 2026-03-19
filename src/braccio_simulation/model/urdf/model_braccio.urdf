@@ -222,8 +222,6 @@
   </link>
 
   <joint name="supServoRot" type="fixed">
-    <axis xyz="0 1 0"/>
-    <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
     <parent link="supportLastservo"/>
     <child link="servoRot"/>
     <origin xyz="0.042 0 0"/>

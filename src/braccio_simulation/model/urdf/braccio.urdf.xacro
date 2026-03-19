@@ -4,70 +4,100 @@
   <xacro:macro name="r6bot_description">
 
   <!-- Load the YAML file -->
-  <!-- 
-  <xacro:property name="yaml_file" value="$(find ros2_sim_description)/config/rrr.yaml"/>
-  <xacro:property name="robot_measures" value="${xacro.load_yaml(yaml_file)}"/>
+  <!-- <xacro:property name="yaml_file" value="$(find braccio_simulation)/urdf/config/braccio_param.yaml"/>
+  <xacro:property name="robot_descr" value="${xacro.load_yaml(yaml_file)}"/> -->
   
-  <xacro:property name="box_base_length" value="${robot_measures['box_base']['length']}"/>
-  -->
   <!-- helper macro -->
-  <xacro:include filename="$(find ros2_control_demo_description)/r6bot/urdf/inc/create_link.xacro"/>
+  <xacro:include filename="$(find braccio_simulation)/model/urdf/inc/create_link.xacro"/>
 
-  <xacro:create_link
+  <xacro:create_link_from_box
       link_name="base_link"
+      xyz_offset="0 0 0.0145"
+      rpy_offset="0 0 0"
+      dim_box="0.088 0.090 0.029"
+  />
+
+  <xacro:create_link_from_box
+      link_name="base_up"
       xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="ros2_control_demo_description/r6bot"
-      mesh_name="link_0"
+      dim_box="0.059 0.026 0.050"
   />
 
-  <xacro:create_link
-      link_name="link_1"
-      xyz_offset="0 0 -0.182"
+  <xacro:create_link_from_box
+      link_name="arm_rot"
+      xyz_offset="0.002 0.012 0.013"
       rpy_offset="0 0 0"
-      mesh_package="ros2_control_demo_description/r6bot"
-      mesh_name="link_1"
+      dim_box="0.058 0.050 0.026"
   />
 
-  <xacro:create_link
-      link_name="link_2"
-      xyz_offset="0 0 -0.168"
-      rpy_offset="0 0 0"
-      mesh_package="ros2_control_demo_description/r6bot"
-      mesh_name="link_2"
+  <xacro:create_link_from_mesh
+      link_name="arm_1_up_down_p1"
+      xyz_offset="0 0 0"
+      rpy_offset="0 0 -${pi2}"
+      mesh_package="model/3Dparts"
+      mesh_name="ModelARM-Body.stl"
   />
 
-  <xacro:create_link
-      link_name="link_3"
-      xyz_offset="0 0 -0.144"
-      rpy_offset="0 0 0"
-      mesh_package="ros2_control_demo_description/r6bot"
-      mesh_name="link_3"
+  <xacro:create_link_from_mesh
+      link_name="arm_1_up_down_p2"
+      xyz_offset="0 0 0"
+      rpy_offset="${pi} 0 -${pi2}"
+      mesh_package="model/3Dparts"
+      mesh_name="ModelARM-Body.stl"
   />
 
-  <xacro:create_link
-      link_name="link_4"
-      xyz_offset="0 0 0.077"
+  <xacro:create_link_from_box
+      link_name="arm_2_up_down"
+      xyz_offset="0.045 -0.001 0"
       rpy_offset="0 0 0"
-      mesh_package="ros2_control_demo_description/r6bot"
-      mesh_name="link_4"
+      dim_box="0.13 0.050 0.028"
   />
 
-  <xacro:create_link
-      link_name="link_5"
-      xyz_offset="0 0 0.113"
-      rpy_offset="0 0 0"
-      mesh_package="ros2_control_demo_description/r6bot"
-      mesh_name="link_5"
+  <xacro:create_link_from_mesh
+      link_name="arm_3_up_down"
+      xyz_offset="0 0 0"
+      rpy_offset="0 0 -${pi2}"
+      mesh_package="model/3Dparts"
+      mesh_name="ModelARM-Body.stl"
   />
 
-  <xacro:create_link
-      link_name="link_6"
-      xyz_offset="0 0 0.086"
+  <xacro:create_link_from_box
+      link_name="box_servo_rot"
+      xyz_offset="0 0 0"
       rpy_offset="0 0 0"
-      mesh_package="ros2_control_demo_description/r6bot"
-      mesh_name="link_6"
+      dim_box="0.042 0.042 0.021"
   />
+
+  <xacro:create_link_from_box
+      link_name="rot_grasp"
+      xyz_offset="0.0265 0 0"
+      rpy_offset="0 0 0"
+      dim_box="0.053 0.055 0.019"
+  />
+
+  <xacro:create_link_from_box
+      link_name="grasp_box"
+      xyz_offset="0.03 0.025 0.0165"
+      rpy_offset="0 0 0"
+      dim_box="0.020 0.050 0.033"
+  />
+
+  <xacro:create_link_from_box
+      link_name="grasp_l"
+      xyz_offset="0.029 0.005 0"
+      rpy_offset="0 0 0"
+      dim_box="0.058 0.010 0.020"
+  />
+
+  <xacro:create_link_from_box
+      link_name="grasp_r"
+      xyz_offset="0.029 -0.005 0"
+      rpy_offset="0 0 0"
+      dim_box="0.058 0.010 0.020"
+  />
+
+
 
   <link name="ft_frame"/>
   <link name="tool0"/>

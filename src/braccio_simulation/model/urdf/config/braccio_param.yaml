@@ -1,6 +1,71 @@
-box_base:
-  length: 0.4
+mesh_path: "model/3Dparts"
 
-cylinder_link:
-  radius: 0.1
-  length: 1.0
+base_link:
+  box_sixe: "0.088 0.090 0.029"
+  origin_xyz: "0 0 0.0145"
+  origin_rpy: "0 0 0"
+
+base_up:
+  box_sixe: "0.059 0.026 0.050"
+  origin_xyz: "0 0 0"
+  origin_rpy: "0 0 0"
+
+# servo_rotz
+arm_rot: 
+  box_sixe: "0.058 0.050 0.026"
+  origin_xyz: "0.002 0.012 0.013"
+  origin_rpy: "0 0 0"
+
+# connection_servo12:
+arm_1_up_down_p1:
+  mesh_name : ModelARM-Body.stl
+  origin_xyz: "0 0 0"
+  origin_rpy: "0 0 -${pi2}"
+
+# connection_servo12:
+arm_1_up_down_p2:
+  mesh_name : ModelARM-Body.stl
+  origin_xyz: "0 0 0"
+  origin_rpy: "${pi} 0 -${pi2}"
+
+# middle2servo
+arm_2_up_down:
+  box_sixe: "0.13 0.050 0.028"
+  origin_xyz: "0.045 -0.001 0"
+  origin_rpy: "0 0 0"
+
+#supportLastservo
+arm_3_up_down:
+  mesh_name : ModelARM-Body.stl
+  origin_xyz: "0 0 0"
+  origin_rpy: "0 0 -${pi2}"
+
+#servoRot
+box_servo_rot:
+  origin_xyz: "0 0 0"
+  origin_rpy: "0 0 0"
+  box_sixe: "0.042 0.042 0.021"
+
+#servo_arm_rotation
+rot_grasp:
+  origin_xyz: "0.0265 0 0"
+  origin_rpy: "0 0 0"
+  box_sixe: "0.053 0.055 0.019"
+
+#gripper_motor
+grasp_box:
+  origin_xyz: "0.03 0.025 0.0165"
+  origin_rpy: "0 0 0"
+  box_sixe: "0.020 0.050 0.033"
+
+#gripper_motor
+grasp_l:
+  origin_xyz: "0.029 0.005 0"
+  origin_rpy: "0 0 0"
+  box_sixe: "0.058 0.010 0.020"
+
+#gripper_motor
+grasp_r:
+  origin_xyz: "0.029 -0.005 0"
+  origin_rpy: "0 0 0"
+  box_sixe: "0.058 0.010 0.020"
