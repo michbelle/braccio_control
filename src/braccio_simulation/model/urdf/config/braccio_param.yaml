@@ -22,7 +22,7 @@ arm_1_up_down_p1:
   origin_xyz: "0 0 0"
   origin_rpy: "0 0 -${pi2}"
 
-# connection_servo12:
+# connection_servo12_2:
 arm_1_up_down_p2:
   mesh_name : ModelARM-Body.stl
   origin_xyz: "0 0 0"
@@ -58,13 +58,13 @@ grasp_box:
   origin_rpy: "0 0 0"
   box_sixe: "0.020 0.050 0.033"
 
-#gripper_motor
+#left_g
 grasp_l:
   origin_xyz: "0.029 0.005 0"
   origin_rpy: "0 0 0"
   box_sixe: "0.058 0.010 0.020"
 
-#gripper_motor
+#right_g
 grasp_r:
   origin_xyz: "0.029 -0.005 0"
   origin_rpy: "0 0 0"

@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="braccio_description">
+
+    <!-- Load the YAML file -->
+    <!-- <xacro:property name="yaml_file" value="$(find braccio_simulation)/urdf/config/braccio_param.yaml"/>
+    <xacro:property name="robot_descr" value="${xacro.load_yaml(yaml_file)}"/> -->
+    
+    <!-- helper macro -->
+
+    <xacro:property name="pi2" value="1.570796327" /> 
+
+    <xacro:include filename="$(find braccio_simulation)/model/urdf/inc/create_link.xacro"/>
+
+    <xacro:create_link_from_box
+        link_name="base_link"
+        xyz_offset="0 0 0.0145"
+        rpy_offset="0 0 0"
+        dim_box="0.088 0.090 0.029"
+    />
+
+    <xacro:create_link_from_box
+        link_name="base_vert_servo_rot"
+        xyz_offset="0 0 0"
+        rpy_offset="0 0 0"
+        dim_box="0.059 0.026 0.050"
+    />
+    <xacro:create_link_from_box
+        link_name="base_servo_ud"
+        xyz_offset="0.002 0.012 0.013"
+        rpy_offset="0 0 0"
+        dim_box="0.058 0.050 0.026"
+    />
+
+    <xacro:create_link_from_mesh
+        link_name="arm_1_up_down_p1"
+        xyz_offset="0 0 0"
+        rpy_offset="0 0 -${pi2}"
+        mesh_package="$(find braccio_simulation)/model/3Dparts"
+        mesh_name="ModelARM-Body.stl"
+    />
+
+    <xacro:create_link_from_mesh
+        link_name="arm_1_up_down_p2"
+        xyz_offset="0 0 0"
+        rpy_offset="${pi} 0 -${pi2}"
+        mesh_package="$(find braccio_simulation)/model/3Dparts"
+        mesh_name="ModelARM-Body.stl"
+    />
+
+    <xacro:create_link_from_box
+        link_name="arm_2_up_down"
+        xyz_offset="0.045 -0.001 0"
+        rpy_offset="0 0 0"
+        dim_box="0.13 0.050 0.028"
+    />
+
+    <xacro:create_link_from_mesh
+        link_name="arm_3_up_down"
+        xyz_offset="0 0 0"
+        rpy_offset="0 0 -${pi2}"
+        mesh_package="$(find braccio_simulation)/model/3Dparts"
+        mesh_name="ModelARM-Body.stl"
+    />
+
+    <xacro:create_link_from_box
+        link_name="box_servo_rot"
+        xyz_offset="0 0 0"
+        rpy_offset="0 0 0"
+        dim_box="0.042 0.042 0.021"
+    />
+
+    <xacro:create_link_from_box
+        link_name="rot_grasp"
+        xyz_offset="0.0265 0 0"
+        rpy_offset="0 0 0"
+        dim_box="0.053 0.055 0.019"
+    />
+
+    <xacro:create_link_from_box
+        link_name="grasp_box"
+        xyz_offset="0.03 0.025 0.0165"
+        rpy_offset="0 0 0"
+        dim_box="0.020 0.050 0.033"
+    />
+
+    <xacro:create_link_from_box
+        link_name="grasp_l"
+        xyz_offset="0.029 0.005 0"
+        rpy_offset="0 0 0"
+        dim_box="0.058 0.010 0.020"
+    />
+
+    <xacro:create_link_from_box
+        link_name="grasp_r"
+        xyz_offset="0.029 -0.005 0"
+        rpy_offset="0 0 0"
+        dim_box="0.058 0.010 0.020"
+    />
+
+    <joint name="world_joint" type="fixed">
+      <parent link="world"/>
+      <child link="base_link"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </joint>
+
+    <joint name="baseup_link" type="fixed">
+      <parent link="base_link"/>
+      <child link="base_vert_servo_rot"/>
+      <origin xyz="-0.0145 0 0.054"/>
+    </joint>
+
+    <joint name="arm_rot" type="revolute">
+      <axis xyz="0 0 1"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <parent link="base_vert_servo_rot"/>
+      <child link="base_servo_ud"/>
+      <origin xyz="-0.012 0 0.025"/>
+    </joint>
+
+    <joint name="arm_1_up_down" type="revolute">
+      <axis xyz="0 1 0"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <parent link="base_servo_ud"/>
+      <child link="arm_1_up_down_p1"/>
+      <origin xyz="0.011 0.013 0.014"/>
+    </joint>
+
+    <joint name="arm_1_up_down_2" type="fixed">
+      <parent link="arm_1_up_down_p1"/>
+      <child link="arm_1_up_down_p2"/>
+      <origin xyz="0.106 0.0 0.0"/>
+    </joint>
+
+    <joint name="arm_2_up_down" type="revolute">
+      <axis xyz="0 1 0"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <parent link="arm_1_up_down_p2"/>
+      <child link="arm_2_up_down"/>
+      <origin xyz="0.0 0.0 0"/>
+    </joint>
+
+    <joint name="arm_3_up_down" type="revolute">
+      <axis xyz="0 1 0"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <parent link="arm_2_up_down"/>
+      <child link="arm_3_up_down"/>
+      <origin xyz="0.091 0 0"/>
+    </joint>
+
+    <joint name="supServoRot" type="fixed">
+      <parent link="arm_3_up_down"/>
+      <child link="box_servo_rot"/>
+      <origin xyz="0.042 0 0"/>
+    </joint>
+
+    <joint name="rot_grasp" type="revolute">
+      <axis xyz="1 0 0"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <parent link="box_servo_rot"/>
+      <child link="rot_grasp"/>
+      <origin xyz="0.028 -0.011 0"/>
+    </joint>
+
+    <joint name="rotation_grip" type="fixed">
+      <parent link="rot_grasp"/>
+      <child link="grasp_box"/>
+      <origin xyz="0 0 0"/>
+    </joint>
+
+    <joint name="grasp" type="prismatic">
+      <axis xyz="0 1 0"/>
+      <limit
+        lower="0"
+        upper="0.03"
+        velocity="2.0"
+        effort="1000" />
+      <parent link="rot_grasp"/>
+      <child link="grasp_l"/>
+      <origin xyz="0.052 0 0"/>
+    </joint>
+
+    <joint name="plan_move" type="prismatic">
+      <axis xyz="0 -1 0"/>
+      <limit
+        lower="0"
+        upper="0.03"
+        velocity="2.0"
+        effort="1000" />
+      <parent link="rot_grasp"/>
+      <child link="grasp_r"/>
+      <origin xyz="0.052 0 0"/>
+      <mimic 
+        joint="grasp"
+        multiplier="1"
+        offset="0" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>

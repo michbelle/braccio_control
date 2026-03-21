@@ -26,4 +26,8 @@ ros2_control_node runs
 - second non-realtime thread to interact with ROS publishers, subscribers, and services.
 
 ## Writing a URDF
-
+test xacro:
+```bash
+xacro braccio_simulation/model/urdf/braccio.urdf.xacro > braccio.urdf
+urdf_to_graphviz braccio.urdf braccio
+```

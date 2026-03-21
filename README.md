@@ -1,5 +1,11 @@
 # Costruzione del modello di un braccio 6DOF
 
+## install deps
+
+```bash
+rosdep install --from-paths src -y --ignore-src
+```
+
 ## doc
 
 https://robofoundry.medium.com/esp32-micro-ros-actually-working-over-wifi-and-udp-transport-519a8ad52f65
