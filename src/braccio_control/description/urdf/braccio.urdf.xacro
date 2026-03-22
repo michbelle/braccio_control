@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="braccio">
 
   <!-- Import r6bot macro -->
-  <xacro:include filename="$(find braccio_simulation)/urdf/braccio.urdf"/>
+  <xacro:include filename="$(find braccio_simulation)/model/urdf/braccio.urdf.xacro"/>
 
   <!-- create link fixed to the "world" -->
   <link name="world"/>

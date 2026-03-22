@@ -1,5 +1,19 @@
 # DOC
+https://control.ros.org/master/doc/getting_started/getting_started.html
+
 https://control.ros.org/master/doc/ros2_control_demos/example_7/doc/userdoc.html
+
+# Architecture
+
+![alt text](./doc/img/architecture_ros2control.png)
+
+### ros2 control framework
+
+![alt text](./doc/img/framework_ros2control.png)
+
+## Control manager
+
+connects the controllers and hardware-abstraction
 
 
 # DOC
@@ -26,6 +40,15 @@ ros2_control_node runs
 - second non-realtime thread to interact with ROS publishers, subscribers, and services.
 
 ## Writing a URDF
+
+- The <link name="world"/> and <link name="tool0"/> elements are not required. However, it is convention to set the link at the tip of the robot to tool0 and to define the robot’s base link relative to a world frame.
+
+- The ros2_control tag specifies hardware configuration of the robot. More specifically, the available state and command interfaces. The tag has two required attributes: name and type. Additional elements, such as sensors, are also included in this tag.
+
+- The hardware and plugin tags instruct the ros2_control framework to dynamically load a hardware driver conforming to HardwareInterface as a plugin. The plugin is specified as <{Name_Space}/{Class_Name}.
+
+- Finally, the joint tag specifies the state and command interfaces that the loaded plugins will offer. The joint is specified with the name attribute. The command_interface and state_interface tags specify the interface type, usually position, velocity, acceleration, or effort.
+
 test xacro:
 ```bash
 xacro braccio_simulation/model/urdf/braccio.urdf.xacro > braccio.urdf
