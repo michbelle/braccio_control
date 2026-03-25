@@ -1,0 +1,16 @@
+<library path="braccio_control">
+  <class name="braccio_control/RobotSystem"
+         type="braccio_control::RobotSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Robot hardware plugin for 6 dof robot tutorial.
+    </description>
+  </class>
+  <class name="braccio_control/RobotController"
+         type="braccio_control::RobotController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Robot controller plugin for 6 dof robot tutorial.
+    </description>
+  </class>
+</library>

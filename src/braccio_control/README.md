@@ -13,7 +13,36 @@ https://control.ros.org/master/doc/ros2_control_demos/example_7/doc/userdoc.html
 
 ## Control manager
 
-connects the controllers and hardware-abstraction
+connects the controllers and hardware-abstraction.
+CM manages (e.g. loads, activates, deactivates, unloads) controllers and the interfaces they require. On the other hand, it has access (via the Resource Manager) to the hardware components, i.e. their interfaces. The Controller Manager matches required and provided interfaces, granting controllers access to hardware when enabled, or reporting an error if there is an access conflict.
+
+The execution of the control-loop is managed by the CM’s update() method. It reads data from the hardware components, updates outputs of all active controllers, and writes the result to the components
+
+## Resource Manager
+abstracts physical hardware and its drivers (called hardware components) for the ros2_control framework. The RM loads the components using the pluginlib-library, manages their lifecycle and components’ state and command interfaces. The abstraction provided by RM allows reuse of implemented hardware components
+
+In the control loop execution, the RM’s read() and write() methods handle the communication with the hardware components.
+
+## Controllers
+are based on control theory. They compare the reference value with the measured output and, based on this error, calculate a system’s input. The controllers are objects derived from ControllerInterface (controller_interface package in ros2_control) and exported as plugins using pluginlib-library.
+
+When the control-loop is executed, the update() method is called. This method can access the latest hardware state and enable the controller to write to the hardware command interfaces.
+
+## User Interfaces
+Users interact with the ros2_control framework using Controller Manager’s services. For a list of services and their definitions, check the srv folder in the controller_manager_msgs package.
+
+## Hardware Components
+ealize communication to physical hardware and represent its abstraction in the ros2_control framework. The components have to be exported as plugins using pluginlib-library. The Resource Manager dynamically loads those plugins and manages their lifecycle.
+**System**
+
+    Complex (multi-DOF) robotic hardware like industrial robots. The main difference between the Actuator component is the possibility to use complex transmissions like needed for humanoid robot’s hands. This component has reading and writing capabilities. It is used when there is only one logical communication channel to the hardware (e.g., KUKA-RSI).
+**Sensor**
+
+    Robotic hardware is used for sensing its environment. A sensor component is related to a joint (e.g., encoder) or a link (e.g., force-torque sensor). This component type has only reading capabilities.
+**Actuator**
+
+    Simple (1 DOF) robotic hardware like motors, valves, and similar. An actuator implementation is related to only one joint. This component type has reading and writing capabilities. Reading is not mandatory if not possible (e.g., DC motor control with Arduino board). The actuator type can also be used with a multi-DOF robot if its hardware enables modular design, e.g., CAN-communication with each motor independently.
+
 
 
 # DOC

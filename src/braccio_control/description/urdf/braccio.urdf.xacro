@@ -2,15 +2,15 @@
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="braccio">
 
   <!-- Import r6bot macro -->
-  <xacro:include filename="$(find braccio_simulation)/model/urdf/braccio.urdf.xacro"/>
+  <xacro:include filename="$(find braccio_simulation)/model/urdf/braccio_description.urdf.xacro"/>
 
   <!-- create link fixed to the "world" -->
   <link name="world"/>
 
-  <!-- <xacro:r6bot_description/> -->
+  <xacro:braccio_description/>
 
   <!-- Import r6bot ros2_control description -->
-  <xacro:include filename="$(find braccio_control)/ros2_control/r6bot.ros2_control.xacro" />
-  <xacro:r6bot_ros2_control name="braccio"/>
+  <xacro:include filename="$(find braccio_control)/ros2_control/braccio.ros2_control.xacro" />
+  <xacro:braccio_ros2_control name="braccio"/>
 
 </robot>
