@@ -6,6 +6,13 @@
 rosdep install --from-paths src -y --ignore-src
 ```
 
+## install rust
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+
 ## doc
 
 https://robofoundry.medium.com/esp32-micro-ros-actually-working-over-wifi-and-udp-transport-519a8ad52f65
@@ -60,6 +67,6 @@ xhost local:root
 ```
 
 
-```
+```bash
 colcon build --symlink-install --packages-select braccio_simulation
 ```

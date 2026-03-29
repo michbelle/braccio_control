@@ -169,7 +169,7 @@
       <origin xyz="0 0 0"/>
     </joint>
 
-    <joint name="grasp" type="prismatic">
+    <joint name="grasp_ctrl" type="prismatic">
       <axis xyz="0 1 0"/>
       <limit
         lower="0"
@@ -181,7 +181,7 @@
       <origin xyz="0.052 0 0"/>
     </joint>
 
-    <joint name="plan_move" type="prismatic">
+    <joint name="grasp_mirror" type="prismatic">
       <axis xyz="0 -1 0"/>
       <limit
         lower="0"
@@ -192,7 +192,7 @@
       <child link="grasp_r"/>
       <origin xyz="0.052 0 0"/>
       <mimic 
-        joint="grasp"
+        joint="grasp_ctrl"
         multiplier="1"
         offset="0" />
     </joint>

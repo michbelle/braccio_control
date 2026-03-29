@@ -52,37 +52,72 @@ endforeach()
 #   rclcpp::rclcpp
 # )
 
-# add_library(
-#   braccio_control
-#   SHARED
-#   hardware/r6bot_hardware.cpp
-#   controller/r6bot_controller.cpp
-# )
 
-# target_compile_features(braccio_control PUBLIC cxx_std_17)
-# target_include_directories(braccio_control PUBLIC
-# $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
-# $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
-# $<INSTALL_INTERFACE:include/braccio_control>
-# )
-# target_link_libraries(braccio_control PUBLIC
-#   ${trajectory_msgs_TARGETS}
-#   controller_interface::controller_interface
-#   hardware_interface::hardware_interface
-#   pluginlib::pluginlib
-#   realtime_tools::realtime_tools
-# )
+# zenohcxx without dependencies
 
-# # Export hardware plugins
-# pluginlib_export_plugin_description_file(hardware_interface braccio_control.xml)
-# # Export controller plugins
-# pluginlib_export_plugin_description_file(controller_interface braccio_control.xml)
+add_library(zenohcxx INTERFACE)
+target_include_directories(zenohcxx INTERFACE "/home/ros/.local/include")
+
+if(NOT TARGET zenohc::lib) # Only find if target is not already available
+		find_package(zenohc REQUIRED)
+endif()
+if(TARGET zenohc::lib)
+  message(STATUS "defined lib target zenohcxx::zenohc::lib for zenohc::lib")
+else()
+  message(FATAL_ERROR "zenohc::lib target not found")
+endif()
+
+# add_library(zenohcxx_zenohc INTERFACE)
+# target_compile_definitions(zenohcxx_zenohc INTERFACE ZENOHCXX_ZENOHC)
+# target_include_directories(zenohcxx_zenohc INTERFACE "/home/ros/.local/include")
+# add_dependencies(zenohcxx_zenohc zenohc::lib)
+# target_link_libraries(zenohcxx_zenohc INTERFACE zenohc::lib)
+# add_library(zenohcxx::zenohc ALIAS zenohcxx_zenohc)
+
+set(ZENOHCXX_ZENOHC TRUE)
+
+add_library(
+  braccio_control
+  SHARED
+  hardware/braccio_hardware.cpp
+  controller/braccio_controller.cpp
+)
+
+target_compile_definitions(braccio_control INTERFACE ZENOHCXX_ZENOHC)
+add_dependencies(braccio_control zenohc::lib)
+
+target_compile_features(braccio_control PUBLIC cxx_std_17)
+target_include_directories(braccio_control PUBLIC
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/controller/include>
+# $<BUILD_INTERFACE:/home/ros/.local/include/>
+$<BUILD_INTERFACE:/braccio_control/src/zenoh-cpp/include>
+$<BUILD_INTERFACE:/braccio_control/src/zenoh-c/include>
+$<INSTALL_INTERFACE:include/braccio_control>
+)
+
+target_link_libraries(braccio_control PUBLIC
+  ${trajectory_msgs_TARGETS}
+  controller_interface::controller_interface
+  hardware_interface::hardware_interface
+  pluginlib::pluginlib
+  realtime_tools::realtime_tools
+  zenohc::lib
+)
+
+# add_dependencies(braccio_control zenohc::lib)
+
+
+# Export hardware plugins
+pluginlib_export_plugin_description_file(hardware_interface braccio_control.xml)
+# Export controller plugins
+pluginlib_export_plugin_description_file(controller_interface braccio_control.xml)
 
 # INSTALL
-# install(
-#   DIRECTORY hardware/include/
-#   DESTINATION include/braccio_control
-# )
+install(
+  DIRECTORY hardware/include/
+  DESTINATION include/braccio_control
+)
 install(
   DIRECTORY description/launch description/ros2_control description/urdf
   DESTINATION share/braccio_control

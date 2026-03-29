@@ -83,3 +83,20 @@ test xacro:
 xacro braccio_simulation/model/urdf/braccio.urdf.xacro > braccio.urdf
 urdf_to_graphviz braccio.urdf braccio
 ```
+
+
+### More info
+The mimic joints must not have command interfaces but can have state interfaces.
+
+
+## hardware interface
+
+hardware system components are integrated via user defined driver plugins that conform to the HardwareInterface public interface. Hardware plugins specified in the URDF are dynamically loaded during initialization using the pluginlib interface. In order to run the ros2_control_node, a parameter named robot_description must be set. This normally done in the ros2_control launch file.
+
+The hardware plugin for the tutorial robot is a class called **RobotSystem** that inherits from **hardware_interface::SystemInterface**. The SystemInterface is one of the offered hardware interfaces designed for a **complete robot system**.  must implement the following public methods:
+- on_init: communication between the robot hardware needs to be setup and memory dynamic should be allocated
+create a communication with "braccio_control/positions"
+- on_configure: 
+- read: 
+- write: 
+
