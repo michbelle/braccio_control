@@ -12,6 +12,9 @@ rosdep install --from-paths src -y --ignore-src
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
+# TODO read
+https://zenoh.io/blog/2022-08-12-zenoh-serial/
+
 
 ## doc
 
