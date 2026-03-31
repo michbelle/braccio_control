@@ -15,6 +15,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # TODO read
 https://zenoh.io/blog/2022-08-12-zenoh-serial/
 https://kamathrobotics.com/hardware-abstraction-for-sts3215-servos
+https://github.com/derek-diaz/Carto
+https://github.com/arounamounchili/linkforge
 
 
 ## doc
