@@ -77,3 +77,11 @@ xhost local:root
 ```bash
 colcon build --symlink-install --packages-select braccio_simulation
 ```
+
+build zenoh-cpp
+install in /usr/local
+```bash
+mkdir build && cd build
+cmake ..
+sudo cmake --install .
+```

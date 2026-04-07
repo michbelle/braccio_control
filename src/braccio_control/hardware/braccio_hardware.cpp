@@ -27,10 +27,15 @@ CallbackReturn RobotSystem::on_init(
   }
   // setup communication with robot hardware
   ctrl_position_motor={0,0,0,0,0,0};
-  // zenoh::Config config = zenoh::Config::create_default();
-  // auto session = zenoh::Session::open(std::move(config));
-  // session.put("braccio_control/positions", ctrl_position_motor);
+  zenoh::Config config = zenoh::Config::create_default();
+  // zenoh::Session session = zenoh::Session::open(std::move(config));
+  session = std::make_unique<zenoh::Session>(zenoh::Session::open(std::move(config)));
 
+  // zenoh::Publisher publisher = session.declare_publisher(zenoh::KeyExpr("braccio_control/positions"));
+  publisher = std::make_unique<zenoh::Publisher>(session->declare_publisher(zenoh::KeyExpr("braccio_control/positions")));
+  // publisher.put(zenoh::ext::serialize(ctrl_position_motor));
+  const std::vector<float> input = {0,0,0,0,0,0};
+  publisher->put(zenoh::ext::serialize(input));
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 

@@ -57,7 +57,8 @@ public:
 
 protected:
   position_motor ctrl_position_motor;
-
+  std::unique_ptr<zenoh::Session> session;
+  std::unique_ptr<zenoh::Publisher> publisher;
 };
 
 }  // namespace ros2_control_braccio
