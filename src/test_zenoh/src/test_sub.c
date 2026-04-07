@@ -41,7 +41,7 @@ position_motor ctrl_position_motor;
 
 void data_handler(z_loaned_sample_t *sample, void *ctx) {
     (void)(ctx);
-    printf("qwe\n");
+    printf("data:\n");
     z_view_string_t keystr;
     z_keyexpr_as_view_string(z_sample_keyexpr(sample), &keystr);
     const z_loaned_bytes_t * payload = z_sample_payload(sample);
@@ -60,12 +60,11 @@ void data_handler(z_loaned_sample_t *sample, void *ctx) {
     ze_deserializer_deserialize_float(&data, &ctrl_position_motor.rot_grasp);
     printf("%f\n",ctrl_position_motor.rot_grasp);
     ze_deserializer_deserialize_float(&data, &ctrl_position_motor.grasp);
-    printf("%f\n",ctrl_position_motor.grasp);
-    printf("end\n");
+    printf("%f\n\n",ctrl_position_motor.grasp);
 }
 
 int main(int argc, char **argv) {
-    char *keyexpr = "demo/example/test";
+    char *keyexpr = "braccio_control/positions";
     int n = 0;
 
     z_owned_config_t config;

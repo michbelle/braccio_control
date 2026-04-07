@@ -46,7 +46,23 @@ if(UNIX)
         # add_example(z_sub src/z_sub.c)
     else()
         add_example(test_sub src/test_sub.c)
-        add_example(test_sub2 src/test_sub_old.c)
+        add_example(test_sub_old src/test_sub_old.c)
     endif()
 elseif(MSVC)
 endif()
+
+
+
+cmake_minimum_required(VERSION 3.20)
+project(test_cpp LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(zenohc REQUIRED)
+find_package(zenohcxx REQUIRED)
+
+add_executable(test_cpp test_zenohcpp_pub.cpp)
+
+target_link_libraries(test_cpp PUBLIC
+  zenohcxx::zenohc
+)
