@@ -96,7 +96,13 @@ hardware system components are integrated via user defined driver plugins that c
 The hardware plugin for the tutorial robot is a class called **RobotSystem** that inherits from **hardware_interface::SystemInterface**. The SystemInterface is one of the offered hardware interfaces designed for a **complete robot system**.  must implement the following public methods:
 - on_init: communication between the robot hardware needs to be setup and memory dynamic should be allocated
 create a communication with "braccio_control/positions"
-- on_configure: 
-- read: 
-- write: 
+- on_configure: Initial values are set for state and command interfaces that represent the state all the hardware
+- read: loops over all hardware components and calls the read method. It is executed on the realtime thread, hence the method must obey by realtime constraints. The read method is responsible for updating the data values of the state_interfaces. Since the data value point to class member variables, those values can be filled with their corresponding sensor values, which will in turn update the values of each exported StateInterface object.
+- write: It is called after update in the realtime loop. For this reason, it must also obey by realtime constraints. The write method is responsible for updating the data values of the command_interfaces. As opposed to read, write accesses data values pointer to by the exported CommandInterface objects sends them to the corresponding hardware
+
+### Plugin description file (hardware)
+### CMake library
+
+## controller interface
+
 

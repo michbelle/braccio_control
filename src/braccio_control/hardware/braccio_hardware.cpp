@@ -27,15 +27,21 @@ CallbackReturn RobotSystem::on_init(
   }
   // setup communication with robot hardware
   ctrl_position_motor={0,0,0,0,0,0};
-  zenoh::Config config = zenoh::Config::create_default();
-  // zenoh::Session session = zenoh::Session::open(std::move(config));
-  session = std::make_unique<zenoh::Session>(zenoh::Session::open(std::move(config)));
 
-  // zenoh::Publisher publisher = session.declare_publisher(zenoh::KeyExpr("braccio_control/positions"));
+  zenoh::Config config = zenoh::Config::create_default();
+  session = std::make_unique<zenoh::Session>(zenoh::Session::open(std::move(config)));
   publisher = std::make_unique<zenoh::Publisher>(session->declare_publisher(zenoh::KeyExpr("braccio_control/positions")));
-  // publisher.put(zenoh::ext::serialize(ctrl_position_motor));
-  const std::vector<float> input = {0,0,0,0,0,0};
-  publisher->put(zenoh::ext::serialize(input));
+
+  auto serializer = zenoh::ext::Serializer();
+  serializer.serialize(ctrl_position_motor.rot1);
+  serializer.serialize(ctrl_position_motor.arm1_up);
+  serializer.serialize(ctrl_position_motor.arm2_up);
+  serializer.serialize(ctrl_position_motor.arm3_up);
+  serializer.serialize(ctrl_position_motor.rot_grasp);
+  serializer.serialize(ctrl_position_motor.grasp);
+  zenoh::Bytes bytes = std::move(serializer).finish();
+  publisher->put(std::move(bytes));
+
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -50,18 +56,16 @@ CallbackReturn RobotSystem::on_configure(const rclcpp_lifecycle::State & /*previ
   {
     set_command(name, 0.0);
   }
-  for (const auto & [name, descr] : sensor_state_interfaces_)
-  {
-    set_state(name, 0.0);
-  }
+  // for (const auto & [name, descr] : sensor_state_interfaces_)
+  // {
+  //   set_state(name, 0.0);
+  // }
 
   return CallbackReturn::SUCCESS;
 }
 
 return_type RobotSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-  // TODO(pac48) set sensor_states_ values from subscriber
-
   for (std::size_t i = 0; i < info_.joints.size(); i++)
   {
     const auto name_vel = info_.joints[i].name + "/" + hardware_interface::HW_IF_VELOCITY;
@@ -74,6 +78,22 @@ return_type RobotSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Durat
 
 return_type RobotSystem::write(const rclcpp::Time &, const rclcpp::Duration &)
 {
+
+  for (std::size_t i = 0; i < info_.joints.size(); i++)
+  for (const auto & [name, descr] : joint_command_interfaces_)
+  {
+    const auto name_pos = info_.joints[i].name + "/" + hardware_interface::HW_IF_POSITION;
+    "command pos: " << get_command(name_pos)
+  }
+  auto serializer = zenoh::ext::Serializer();
+  serializer.serialize(ctrl_position_motor.rot1);
+  serializer.serialize(ctrl_position_motor.arm1_up);
+  serializer.serialize(ctrl_position_motor.arm2_up);
+  serializer.serialize(ctrl_position_motor.arm3_up);
+  serializer.serialize(ctrl_position_motor.rot_grasp);
+  serializer.serialize(ctrl_position_motor.grasp);
+  zenoh::Bytes bytes = std::move(serializer).finish();
+  publisher->put(std::move(bytes));
   return return_type::OK;
 }
 
