@@ -20,13 +20,20 @@
 #include <rclcpp/rclcpp.hpp>
 #include <trajectory_msgs/msg/joint_trajectory.hpp>
 #include <trajectory_msgs/msg/joint_trajectory_point.hpp>
+#include <std_msgs/msg/bool.hpp>
 
-int main(int argc, char ** argv)
-{
+#include <chrono>
+#include <thread>
+
+bool res;
+
+int main(int argc, char ** argv){
   rclcpp::init(argc, argv);
   auto node = std::make_shared<rclcpp::Node>("send_trajectory");
   auto pub = node->create_publisher<trajectory_msgs::msg::JointTrajectory>(
-    "/joint_trajectory", 10);
+  "/braccio_controller/joint_trajectory", 10);
+  auto pub2 = node->create_publisher<std_msgs::msg::Bool>(
+  "/braccio_controller/joint_trajectory/bool", 10);
 
   // get robot description
   auto robot_param = rclcpp::Parameter();
@@ -38,21 +45,24 @@ int main(int argc, char ** argv)
   KDL::Tree robot_tree;
   KDL::Chain chain;
   kdl_parser::treeFromString(robot_description, robot_tree);
-  robot_tree.getChain("base_link", "tool0", chain);
+  res = robot_tree.getChain("base_link", "tool0", chain);
+  if (res==false){
+    throw;
+  }
 
   auto joint_positions = KDL::JntArray(chain.getNrOfJoints());
   auto joint_velocities = KDL::JntArray(chain.getNrOfJoints());
   auto twist = KDL::Twist();
   // create KDL solvers
   auto ik_vel_solver_ = std::make_shared<KDL::ChainIkSolverVel_pinv>(chain, 0.0000001);
-
+  if (ik_vel_solver_==nullptr){
+    throw;
+  }
   trajectory_msgs::msg::JointTrajectory trajectory_msg;
   trajectory_msg.header.stamp = node->now();
-  for (unsigned int i = 0; i < chain.getNrOfSegments(); i++)
-  {
+  for (unsigned int i = 0; i < chain.getNrOfSegments(); i++){
     auto joint = chain.getSegment(i).getJoint();
-    if (joint.getType() != KDL::Joint::Fixed)
-    {
+    if (joint.getType() != KDL::Joint::Fixed){
       trajectory_msg.joint_names.push_back(joint.getName());
     }
   }
@@ -65,16 +75,17 @@ int main(int argc, char ** argv)
   int trajectory_len = 200;
   double dt = total_time / static_cast<double>(trajectory_len - 1);
 
-  for (int i = 0; i < trajectory_len; i++)
-  {
+  for (int i = 0; i < trajectory_len; i++){
     // set endpoint twist
     double t = i / (static_cast<double>(trajectory_len - 1));
-    twist.vel.x(2 * 0.3 * cos(2 * M_PI * t));
-    twist.vel.y(-0.3 * sin(2 * M_PI * t));
+    twist.vel.x( 1 * cos(2 * M_PI * t));
+    twist.vel.y(-1 * sin(2 * M_PI * t));
+    // twist.vel.z(-1 * sin(2 * M_PI * t));
+    twist.rot.x(2);
 
     // convert cart to joint velocities
-    ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
-
+    auto resu = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
+    std::cout<<"result : "<<resu<<std::endl;
     // copy to trajectory_point_msg
     std::memcpy(
       trajectory_point_msg.positions.data(), joint_positions.data.data(),
@@ -98,10 +109,10 @@ int main(int argc, char ** argv)
   // send zero velocities in the end
   auto & last_point_msg = trajectory_msg.points.back();
   std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
-
   pub->publish(trajectory_msg);
-  while (rclcpp::ok())
-  {
+  while (rclcpp::ok()){
+    pub->publish(trajectory_msg);
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   }
 
   return 0;
