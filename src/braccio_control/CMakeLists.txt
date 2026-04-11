@@ -44,13 +44,13 @@ foreach(Dependency IN ITEMS ${CONTROLLER_INCLUDE_DEPENDS})
 endforeach()
 
 ## COMPILE
-# add_executable(send_trajectory reference_generator/send_trajectory.cpp)
+add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
-# target_link_libraries(send_trajectory PUBLIC
-#   ${trajectory_msgs_TARGETS}
-#   kdl_parser::kdl_parser
-#   rclcpp::rclcpp
-# )
+target_link_libraries(send_trajectory PUBLIC
+  ${trajectory_msgs_TARGETS}
+  kdl_parser::kdl_parser
+  rclcpp::rclcpp
+)
 
 
 # zenohcxx
@@ -103,21 +103,21 @@ install(
   DIRECTORY bringup/launch bringup/config
   DESTINATION share/braccio_control
 )
-# install(
-#     TARGETS send_trajectory
-#     RUNTIME DESTINATION lib/braccio_control
-# )
+install(
+    TARGETS send_trajectory
+    RUNTIME DESTINATION lib/braccio_control
+)
 
-# install(TARGETS braccio_control
-#   EXPORT braccio_control
-#   ARCHIVE DESTINATION lib
-#   LIBRARY DESTINATION lib
-#   RUNTIME DESTINATION bin
-# )
+install(TARGETS braccio_control
+  EXPORT export_braccio_control
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
-  ament_add_pytest_test(example_7_urdf_xacro test/test_urdf_xacro.py)
+  ament_add_pytest_test(braccio_control test/test_urdf_xacro.py)
 
   # Integration (launch) tests
   find_package(ament_cmake_ros REQUIRED)
@@ -127,10 +127,10 @@ if(BUILD_TESTING)
     add_launch_test("${path}" RUNNER "${RUNNER}" ${ARGN})
   endfunction()
   add_ros_isolated_launch_test(test/test_view_robot_launch.py)
-  add_ros_isolated_launch_test(test/test_r6bot_controller_launch.py)
+  add_ros_isolated_launch_test(test/test_braccio_controller_launch.py)
 endif()
 
 ## EXPORTS
-# ament_export_targets(export_braccio_control HAS_LIBRARY_TARGET)
-# ament_export_dependencies(${HW_IF_INCLUDE_DEPENDS} ${REF_GEN_INCLUDE_DEPENDS} ${CONTROLLER_INCLUDE_DEPENDS})
+ament_export_targets(export_braccio_control HAS_LIBRARY_TARGET)
+ament_export_dependencies(${HW_IF_INCLUDE_DEPENDS} ${REF_GEN_INCLUDE_DEPENDS} ${CONTROLLER_INCLUDE_DEPENDS})
 ament_package()

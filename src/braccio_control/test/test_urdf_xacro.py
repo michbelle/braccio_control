@@ -38,8 +38,8 @@ from ament_index_python.packages import get_package_share_directory
 
 def test_urdf_xacro():
     # General Arguments
-    description_package = "ros2_control_demo_example_7"
-    description_file = "r6bot.urdf.xacro"
+    description_package = "braccio_control"
+    description_file = "braccio.urdf.xacro"
 
     description_file_path = os.path.join(
         get_package_share_directory(description_package), "urdf", description_file

@@ -53,8 +53,8 @@ def generate_test_description():
     launch_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("ros2_control_demo_example_7"),
-                "launch/r6bot_controller.launch.py",
+                get_package_share_directory("braccio_control"),
+                "launch/braccio_control.launch.py",
             )
         ),
         launch_arguments={"gui": "false"}.items(),
@@ -85,13 +85,13 @@ class TestFixture(unittest.TestCase):
 
     def test_controller_running(self, proc_output):
 
-        cnames = ["r6bot_controller", "joint_state_broadcaster"]
+        cnames = ["braccio_control", "joint_state_broadcaster"]
 
         check_controllers_running(self.node, cnames)
 
     def test_check_if_msgs_published(self):
         check_if_js_published(
-            "/joint_states", ["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6"]
+            "/joint_states", ["arm_rot", "arm_1_up_down", "arm_2_up_down", "arm_3_up_down", "rot_grasp", "grasp_ctrl"]
         )
 
 

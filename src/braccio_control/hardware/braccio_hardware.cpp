@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "ros2_control_braccio/braccio_hardware.hpp"
+#include "braccio_control/braccio_hardware.hpp"
 #include <string>
 #include <vector>
 
-namespace ros2_control_braccio
+namespace braccio_control
 {
 CallbackReturn RobotSystem::on_init(
   const hardware_interface::HardwareComponentInterfaceParams & params)
@@ -56,22 +56,16 @@ CallbackReturn RobotSystem::on_configure(const rclcpp_lifecycle::State & /*previ
   {
     set_command(name, 0.0);
   }
-  // for (const auto & [name, descr] : sensor_state_interfaces_)
-  // {
-  //   set_state(name, 0.0);
-  // }
 
   return CallbackReturn::SUCCESS;
 }
 
 return_type RobotSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-  for (std::size_t i = 0; i < info_.joints.size(); i++)
-  {
-    const auto name_vel = info_.joints[i].name + "/" + hardware_interface::HW_IF_VELOCITY;
+  for (std::size_t i = 0; i < info_.joints.size(); i++){
     const auto name_pos = info_.joints[i].name + "/" + hardware_interface::HW_IF_POSITION;
-    set_state(name_vel, get_command(name_vel));
-    set_state(name_pos, get_state(name_pos) + get_state(name_vel) * period.seconds());
+    set_state(name_pos, get_command(name_pos));
+    // std::cout<<name_pos<<get_command(name_pos)<<std::endl;
   }
   return return_type::OK;
 }
@@ -79,11 +73,23 @@ return_type RobotSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Durat
 return_type RobotSystem::write(const rclcpp::Time &, const rclcpp::Duration &)
 {
 
-  for (std::size_t i = 0; i < info_.joints.size(); i++)
-  for (const auto & [name, descr] : joint_command_interfaces_)
-  {
-    const auto name_pos = info_.joints[i].name + "/" + hardware_interface::HW_IF_POSITION;
-    "command pos: " << get_command(name_pos)
+  // for (const auto & [name, descr] : joint_command_interfaces_){
+  for (std::size_t i = 0; i < info_.joints.size(); i++){
+    const auto name = info_.joints[i].name + "/" + hardware_interface::HW_IF_POSITION;
+    // std::cout<<name<<get_command(name)<<std::endl;
+    if (name == "arm_rot"){
+      ctrl_position_motor.rot1=static_cast<float>(get_command(name));
+    }else if(name == "arm_1_up_down"){
+      ctrl_position_motor.arm1_up=static_cast<float> (get_command(name));
+    }else if(name == "arm_2_up_down"){
+      ctrl_position_motor.arm2_up=static_cast<float> (get_command(name));
+    }else if(name == "arm_3_up_down"){
+      ctrl_position_motor.arm3_up=static_cast<float> (get_command(name));
+    }else if(name == "rot_grasp"){
+      ctrl_position_motor.rot_grasp=static_cast<float> (get_command(name));
+    }else if(name == "grasp"){
+      ctrl_position_motor.grasp=static_cast<float> (get_command(name));
+    }
   }
   auto serializer = zenoh::ext::Serializer();
   serializer.serialize(ctrl_position_motor.rot1);
@@ -97,9 +103,9 @@ return_type RobotSystem::write(const rclcpp::Time &, const rclcpp::Duration &)
   return return_type::OK;
 }
 
-}  // namespace ros2_control_braccio
+}  // namespace braccio_control
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_braccio::RobotSystem, hardware_interface::SystemInterface)
+  braccio_control::RobotSystem, hardware_interface::SystemInterface)

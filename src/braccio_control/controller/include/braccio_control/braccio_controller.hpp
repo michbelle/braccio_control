@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_BRACCIO__BRACCIO_CONTROLLER_HPP_
-#define ROS2_CONTROL_BRACCIO__BRACCIO_CONTROLLER_HPP_
+#ifndef BRACCIO_CONTROL__BRACCIO_CONTROLLER_HPP_
+#define BRACCIO_CONTROL__BRACCIO_CONTROLLER_HPP_
 
 #include <atomic>
 #include <chrono>
@@ -38,7 +38,7 @@
 #include "trajectory_msgs/msg/joint_trajectory.hpp"
 #include "trajectory_msgs/msg/joint_trajectory_point.hpp"
 
-namespace ros2_control_braccio
+namespace braccio_control
 {
 class RobotController : public controller_interface::ControllerInterface
 {
@@ -97,6 +97,6 @@ protected:
       {"velocity", &joint_velocity_state_interface_}};
 };
 
-}  // namespace ros2_control_braccio
+}  // namespace braccio_control
 
-#endif  // ROS2_CONTROL_braccio__R6BOT_CONTROLLER_HPP_
+#endif  // BRACCIO_CONTROL__R6BOT_CONTROLLER_HPP_

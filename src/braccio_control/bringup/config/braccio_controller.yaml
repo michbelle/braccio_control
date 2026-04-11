@@ -8,14 +8,14 @@ controller_manager:
 
 braccio_controller:
   ros__parameters:
-    type: ros2_control/BraccioController
+    type: braccio_control/RobotController
     joints:
       - arm_rot
       - arm_1_up_down
       - arm_2_up_down
       - arm_3_up_down
       - rot_grasp
-      - grasp
+      - grasp_ctrl
 
     command_interfaces:
       - position

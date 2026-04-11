@@ -44,8 +44,8 @@ def generate_test_description():
     launch_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("ros2_control_demo_example_7"),
-                "launch/view_r6bot.launch.py",
+                get_package_share_directory("braccio_control"),
+                "launch/view_robot.launch.py",
             )
         ),
         launch_arguments={"gui": "true"}.items(),

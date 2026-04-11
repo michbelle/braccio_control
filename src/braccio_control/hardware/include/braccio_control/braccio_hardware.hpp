@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_BRACCIO__BRACCIO_HARDWARE_HPP_
-#define ROS2_CONTROL_BRACCIO__BRACCIO_HARDWARE_HPP_
+#ifndef BRACCIO_CONTROL__BRACCIO_HARDWARE_HPP_
+#define BRACCIO_CONTROL__BRACCIO_HARDWARE_HPP_
 
 #include "string"
 #include "unordered_map"
@@ -39,7 +39,7 @@ typedef struct position_motor{
 
 using hardware_interface::return_type;
 
-namespace ros2_control_braccio
+namespace braccio_control
 {
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
@@ -61,6 +61,6 @@ protected:
   std::unique_ptr<zenoh::Publisher> publisher;
 };
 
-}  // namespace ros2_control_braccio
+}  // namespace braccio_control
 
-#endif  // ROS2_CONTROL_BRACCIO__BRACCIO_HARDWARE_HPP_
+#endif  // BRACCIO_CONTROL__BRACCIO_HARDWARE_HPP_

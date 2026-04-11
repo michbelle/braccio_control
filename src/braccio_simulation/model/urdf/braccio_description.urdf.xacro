@@ -197,6 +197,14 @@
         offset="0" />
     </joint>
 
+  
+  <link name="tool0"/>
+  <joint name="joint-tool" type="fixed">
+    <parent link="rot_grasp"/>
+    <child link="tool0"/>
+    <origin xyz="0.07 0 0" rpy="0 0 0"/>
+  </joint>
+
   </xacro:macro>
 
 </robot>

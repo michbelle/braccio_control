@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "ros2_control_braccio/braccio_controller.hpp"
+#include "braccio_control/braccio_controller.hpp"
 
 #include <stddef.h>
 #include <algorithm>
@@ -27,7 +27,7 @@
 
 using config_type = controller_interface::interface_configuration_type;
 
-namespace ros2_control_braccio
+namespace braccio_control
 {
 RobotController::RobotController() : controller_interface::ControllerInterface() {}
 
@@ -58,6 +58,7 @@ controller_interface::InterfaceConfiguration RobotController::command_interface_
   {
     for (const auto & interface_type : command_interface_types_)
     {
+      std::cout<<"---"<<joint_name<<interface_type<<std::endl;
       conf.names.push_back(joint_name + "/" + interface_type);
     }
   }
@@ -211,9 +212,9 @@ controller_interface::CallbackReturn RobotController::on_deactivate(const rclcpp
   return CallbackReturn::SUCCESS;
 }
 
-}  // namespace ros2_control_braccio
+}  // namespace braccio_control
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_braccio::RobotController, controller_interface::ControllerInterface)
+  braccio_control::RobotController, controller_interface::ControllerInterface)

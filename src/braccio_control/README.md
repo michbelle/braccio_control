@@ -100,8 +100,24 @@ create a communication with "braccio_control/positions"
 - read: loops over all hardware components and calls the read method. It is executed on the realtime thread, hence the method must obey by realtime constraints. The read method is responsible for updating the data values of the state_interfaces. Since the data value point to class member variables, those values can be filled with their corresponding sensor values, which will in turn update the values of each exported StateInterface object.
 - write: It is called after update in the realtime loop. For this reason, it must also obey by realtime constraints. The write method is responsible for updating the data values of the command_interfaces. As opposed to read, write accesses data values pointer to by the exported CommandInterface objects sends them to the corresponding hardware
 
-### Plugin description file (hardware)
-### CMake library
+## controller
+
+controllers exists in a finite set of states:
+- Unconfigured
+- Inactive
+- Active
+- Finalized
+managed states:
+- on_init: only once during the lifetime for the controller, hence memory that exists for the lifetime of the controller should be allocated. the parameter values for joints, command_interfaces and state_interfaces should be declared and accessed.
+- on_configure: Reconfigurable parameters should be read in this method. publishers and subscribers should be created.
+- command_interface_configuration: returns a list of InterfaceConfiguration objects to indicate which command interfaces the controller needs to operate. The command interfaces are uniquely identified by their name and interface type. If a requested interface is not offered by a loaded hardware interface, then the controller will fail.
+- state_interface_configuration: list of InterfaceConfiguration objects representing the required state interfaces to operate is returned
+- on_activate: should handle controller restarts, such as setting the resetting reference to safe values. It should also perform controller specific safety checks. The command_interface_configuration and state_interface_configuration methods are also called again when the controller is activated.
+- update: part of the realtime control loop, the realtime constraint must be enforced.The controller should read from its state interfaces, read its reference and calculate a control output. the reference is accessed via a ROS 2 subscriber. Since the subscriber runs on the non-realtime thread, a realtime buffer is used to a transfer the message to the realtime thread. The realtime buffer is eventually a pointer to a ROS message with a mutex that guarantees thread safety and that the realtime thread is never blocked. The calculated control output should then be written to the command interface, which will in turn control the hardware.
+- on_deactivate
+- on_cleanup
+- on_error
+- on_shutdown
 
 ## controller interface
 
