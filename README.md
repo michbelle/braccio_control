@@ -12,6 +12,18 @@ rosdep install --from-paths src -y --ignore-src
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
+potrebbe essere che il submodule fallisce di `cmake build`
+
+## install zenoh
+curl -L https://download.eclipse.org/zenoh/debian-repo/zenoh-public-key | sudo gpg --dearmor --yes --output /etc/apt/keyrings/zenoh-public-key.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/zenoh-public-key.gpg] https://download.eclipse.org/zenoh/debian-repo/ /" | sudo tee -a /etc/apt/sources.list > /dev/null
+
+sudo apt update
+
+sudo apt install zenoh
+
+
 # TODO read
 https://zenoh.io/blog/2022-08-12-zenoh-serial/
 https://kamathrobotics.com/hardware-abstraction-for-sts3215-servos

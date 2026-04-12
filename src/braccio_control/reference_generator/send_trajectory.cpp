@@ -44,7 +44,7 @@ int convertInputJoy(const sensor_msgs::msg::Joy::SharedPtr msg){
   }else{
     inv_z=1;
   }
-  vel_commands.z=inv_z*(1.0-(msg->axes[2]+1.0)/2.0);
+  vel_commands.z=static_cast<float>(inv_z*(1.0-(msg->axes[2]+1.0)/2.0));
   vel_commands.wx=msg->axes[4];
   vel_commands.wy=msg->axes[3];
   if (msg->buttons[5]==1){
@@ -52,8 +52,9 @@ int convertInputJoy(const sensor_msgs::msg::Joy::SharedPtr msg){
   }else{
     inv_wz=1;
   }
-  vel_commands.wz=inv_wz*(1.0-(msg->axes[5]+1.0)/2.0);
+  vel_commands.wz=static_cast<float>(inv_wz*(1.0-(msg->axes[5]+1.0)/2.0));
   std::cout<<"ok"<<std::endl;
+  return 0;
 }
 
 int main(int argc, char ** argv){
@@ -61,8 +62,8 @@ int main(int argc, char ** argv){
   auto node = std::make_shared<rclcpp::Node>("send_trajectory");
   auto pub = node->create_publisher<trajectory_msgs::msg::JointTrajectory>(
   "/braccio_controller/joint_trajectory", 10);
-  auto sub = node->create_subscription<sensor_msgs::msg::Joy::SharedPtr>(
-  "/braccio_controller/joy_control", 10, &convertInputJoy);
+  auto sub = node->create_subscription<sensor_msgs::msg::Joy>(
+  "/joy", 10, convertInputJoy);
 
   // get robot description
   auto robot_param = rclcpp::Parameter();
@@ -143,7 +144,12 @@ int main(int argc, char ** argv){
 
   }
 
-  int cycletime_ms = 250; 
+  int cycletime_ms = 10000; 
+
+  //TODO
+  rclcpp::spin(node);
+  rclcpp::shutdown();
+
 
   while (rclcpp::ok()){
 
@@ -154,6 +160,7 @@ int main(int argc, char ** argv){
       twist.rot.x(vel_commands.wx);
       twist.rot.y(vel_commands.wy);
       twist.rot.z(vel_commands.wz);
+      std::cout<<vel_commands.x<<std::endl;
 
       auto resu = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
       std::cout<<"result : "<<resu<<std::endl;

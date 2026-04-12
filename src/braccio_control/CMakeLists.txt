@@ -51,7 +51,7 @@ endforeach()
 ## COMPILE
 add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
-target_link_libraries(send_trajectory PRIVATE
+target_link_libraries(send_trajectory PUBLIC
   ${trajectory_msgs_TARGETS}
   kdl_parser::kdl_parser
   rclcpp::rclcpp
