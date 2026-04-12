@@ -9,7 +9,7 @@ https://github.com/orocos/orocos_kinematics_dynamics
 ```bash
 ros2 launch braccio_control braccio_controller.launch.py
 
-ros2 launch ros2_control_demo_example_7 send_trajectory.launch.py
+ros2 launch braccio_control send_trajectory.launch.py
 ```
 # Architecture
 

@@ -35,34 +35,34 @@ struct vel_commands_struct{
 
 vel_commands_struct vel_commands {0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 };
 
-// int convertInputJoy(const sensor_msgs::msg::Joy::SharedPtr msg){
-//   int inv_z=1, inv_wz=1;
-//   vel_commands.x=msg->axes[1];
-//   vel_commands.y=msg->axes[0];
-//   if (msg->buttons[4]==1){
-//     inv_z=-1;
-//   }else{
-//     inv_z=1;
-//   }
-//   vel_commands.z=inv_z*(1.0-(msg->axes[2]+1.0)/2.0);
-//   vel_commands.wx=msg->axes[4];
-//   vel_commands.wy=msg->axes[3];
-//   if (msg->buttons[5]==1){
-//     inv_wz=-1;
-//   }else{
-//     inv_wz=1;
-//   }
-//   vel_commands.wz=inv_wz*(1.0-(msg->axes[5]+1.0)/2.0);
-//   std::cout<<"ok"<<std::endl;
-// }
+int convertInputJoy(const sensor_msgs::msg::Joy::SharedPtr msg){
+  int inv_z=1, inv_wz=1;
+  vel_commands.x=msg->axes[1];
+  vel_commands.y=msg->axes[0];
+  if (msg->buttons[4]==1){
+    inv_z=-1;
+  }else{
+    inv_z=1;
+  }
+  vel_commands.z=inv_z*(1.0-(msg->axes[2]+1.0)/2.0);
+  vel_commands.wx=msg->axes[4];
+  vel_commands.wy=msg->axes[3];
+  if (msg->buttons[5]==1){
+    inv_wz=-1;
+  }else{
+    inv_wz=1;
+  }
+  vel_commands.wz=inv_wz*(1.0-(msg->axes[5]+1.0)/2.0);
+  std::cout<<"ok"<<std::endl;
+}
 
 int main(int argc, char ** argv){
   rclcpp::init(argc, argv);
   auto node = std::make_shared<rclcpp::Node>("send_trajectory");
   auto pub = node->create_publisher<trajectory_msgs::msg::JointTrajectory>(
   "/braccio_controller/joint_trajectory", 10);
-  // auto sub = node->create_subscription<sensor_msgs::msg::Joy::SharedPtr>(
-  // "/braccio_controller/joy_control", 10, &convertInputJoy);
+  auto sub = node->create_subscription<sensor_msgs::msg::Joy::SharedPtr>(
+  "/braccio_controller/joy_control", 10, &convertInputJoy);
 
   // get robot description
   auto robot_param = rclcpp::Parameter();
