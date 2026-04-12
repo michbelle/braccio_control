@@ -25,15 +25,44 @@
 #include <chrono>
 #include <thread>
 
+#include <sensor_msgs/msg/joy.hpp>
+
 bool res;
+struct vel_commands_struct{
+  float x,y,z;
+  float wx,wy,wz;
+};
+
+vel_commands_struct vel_commands {0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 };
+
+// int convertInputJoy(const sensor_msgs::msg::Joy::SharedPtr msg){
+//   int inv_z=1, inv_wz=1;
+//   vel_commands.x=msg->axes[1];
+//   vel_commands.y=msg->axes[0];
+//   if (msg->buttons[4]==1){
+//     inv_z=-1;
+//   }else{
+//     inv_z=1;
+//   }
+//   vel_commands.z=inv_z*(1.0-(msg->axes[2]+1.0)/2.0);
+//   vel_commands.wx=msg->axes[4];
+//   vel_commands.wy=msg->axes[3];
+//   if (msg->buttons[5]==1){
+//     inv_wz=-1;
+//   }else{
+//     inv_wz=1;
+//   }
+//   vel_commands.wz=inv_wz*(1.0-(msg->axes[5]+1.0)/2.0);
+//   std::cout<<"ok"<<std::endl;
+// }
 
 int main(int argc, char ** argv){
   rclcpp::init(argc, argv);
   auto node = std::make_shared<rclcpp::Node>("send_trajectory");
   auto pub = node->create_publisher<trajectory_msgs::msg::JointTrajectory>(
   "/braccio_controller/joint_trajectory", 10);
-  auto pub2 = node->create_publisher<std_msgs::msg::Bool>(
-  "/braccio_controller/joint_trajectory/bool", 10);
+  // auto sub = node->create_subscription<sensor_msgs::msg::Joy::SharedPtr>(
+  // "/braccio_controller/joy_control", 10, &convertInputJoy);
 
   // get robot description
   auto robot_param = rclcpp::Parameter();
@@ -75,44 +104,76 @@ int main(int argc, char ** argv){
   int trajectory_len = 200;
   double dt = total_time / static_cast<double>(trajectory_len - 1);
 
-  for (int i = 0; i < trajectory_len; i++){
-    // set endpoint twist
-    double t = i / (static_cast<double>(trajectory_len - 1));
-    twist.vel.x( 1 * cos(2 * M_PI * t));
-    twist.vel.y(-1 * sin(2 * M_PI * t));
-    // twist.vel.z(-1 * sin(2 * M_PI * t));
-    twist.rot.x(2);
+  bool calc_tray = false;
+  if (calc_tray){
+    for (int i = 0; i < trajectory_len; i++){
+      // set endpoint twist
+      double t = i / (static_cast<double>(trajectory_len - 1));
+      twist.vel.x( 1 * cos(2 * M_PI * t));
+      twist.vel.y(-1 * sin(2 * M_PI * t));
+      // twist.vel.z(-1 * sin(2 * M_PI * t));
+      twist.rot.x(2);
 
-    // convert cart to joint velocities
-    auto resu = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
-    std::cout<<"result : "<<resu<<std::endl;
-    // copy to trajectory_point_msg
-    std::memcpy(
-      trajectory_point_msg.positions.data(), joint_positions.data.data(),
-      trajectory_point_msg.positions.size() * sizeof(double));
-    std::memcpy(
-      trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
-      trajectory_point_msg.velocities.size() * sizeof(double));
+      // convert cart to joint velocities
+      auto resu = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
+      std::cout<<"result : "<<resu<<std::endl;
+      // copy to trajectory_point_msg
+      std::memcpy(
+        trajectory_point_msg.positions.data(), joint_positions.data.data(),
+        trajectory_point_msg.positions.size() * sizeof(double));
+      std::memcpy(
+        trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
+        trajectory_point_msg.velocities.size() * sizeof(double));
 
-    // integrate joint velocities
-    joint_positions.data += joint_velocities.data * dt;
+      // integrate joint velocities
+      joint_positions.data += joint_velocities.data * dt;
 
-    // set timing information
-    double time_point = total_time * t;
-    double time_point_sec = std::floor(time_point);
-    trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
-    trajectory_point_msg.time_from_start.nanosec =
-      static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
-    trajectory_msg.points.push_back(trajectory_point_msg);
+      // set timing information
+      double time_point = total_time * t;
+      double time_point_sec = std::floor(time_point);
+      trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
+      trajectory_point_msg.time_from_start.nanosec =
+        static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
+      trajectory_msg.points.push_back(trajectory_point_msg);
+    }
+    // send zero velocities in the end
+    auto & last_point_msg = trajectory_msg.points.back();
+    std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
+    pub->publish(trajectory_msg);
+
   }
 
-  // send zero velocities in the end
-  auto & last_point_msg = trajectory_msg.points.back();
-  std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
-  pub->publish(trajectory_msg);
+  int cycletime_ms = 250; 
+
   while (rclcpp::ok()){
+
+    if(!calc_tray){
+      twist.vel.x(vel_commands.x);
+      twist.vel.y(vel_commands.y);
+      twist.vel.z(vel_commands.z);
+      twist.rot.x(vel_commands.wx);
+      twist.rot.y(vel_commands.wy);
+      twist.rot.z(vel_commands.wz);
+
+      auto resu = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
+      std::cout<<"result : "<<resu<<std::endl;
+      std::memcpy(
+        trajectory_point_msg.positions.data(), joint_positions.data.data(),
+        trajectory_point_msg.positions.size() * sizeof(double));
+      std::memcpy(
+        trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
+        trajectory_point_msg.velocities.size() * sizeof(double));
+
+      double time_point = cycletime_ms;
+      double time_point_sec = std::floor(time_point);
+      trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
+      trajectory_point_msg.time_from_start.nanosec =
+        static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
+      trajectory_msg.points.push_back(trajectory_point_msg);
+    }
+
     pub->publish(trajectory_msg);
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(cycletime_ms));
   }
 
   return 0;

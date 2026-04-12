@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 project(braccio_control LANGUAGES CXX)
 
 find_package(ros2_control_cmake REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+
 set_compiler_options()
 export_windows_symbols()
 
@@ -14,7 +17,9 @@ set(REF_GEN_INCLUDE_DEPENDS
   kdl_parser
   rclcpp
   trajectory_msgs
+  sensor_msgs
 )
+
 set(CONTROLLER_INCLUDE_DEPENDS
   pluginlib
   controller_interface
@@ -46,10 +51,11 @@ endforeach()
 ## COMPILE
 add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
-target_link_libraries(send_trajectory PUBLIC
+target_link_libraries(send_trajectory PRIVATE
   ${trajectory_msgs_TARGETS}
   kdl_parser::kdl_parser
   rclcpp::rclcpp
+  sensor_msgs::sensor_msgs_library
 )
 
 

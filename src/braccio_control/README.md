@@ -3,6 +3,14 @@ https://control.ros.org/master/doc/getting_started/getting_started.html
 
 https://control.ros.org/master/doc/ros2_control_demos/example_7/doc/userdoc.html
 
+https://github.com/orocos/orocos_kinematics_dynamics
+
+# launch simul
+```bash
+ros2 launch braccio_control braccio_controller.launch.py
+
+ros2 launch ros2_control_demo_example_7 send_trajectory.launch.py
+```
 # Architecture
 
 ![alt text](./doc/img/architecture_ros2control.png)

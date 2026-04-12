@@ -13,6 +13,9 @@
 		"options": ["--pull"]
 	},
 	"runArgs": [
+		// "--privileged",
+		"--device=/dev/input",
+		// "--group-add=input",
 		"--network=host",
 		"--cap-add=SYS_PTRACE",
 		"--security-opt=seccomp:unconfined",
