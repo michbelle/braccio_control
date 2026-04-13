@@ -1,16 +1,5 @@
 // Copyright 2023 ros2_control Development Team
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Licensed under the Apache License, Version 2.0
 
 #include <kdl/chainfksolverpos_recursive.hpp>
 #include <kdl/chainiksolvervel_pinv.hpp>
@@ -20,168 +9,147 @@
 #include <rclcpp/rclcpp.hpp>
 #include <trajectory_msgs/msg/joint_trajectory.hpp>
 #include <trajectory_msgs/msg/joint_trajectory_point.hpp>
-#include <std_msgs/msg/bool.hpp>
-
-#include <chrono>
-#include <thread>
-
+#include <sensor_msgs/msg/joint_state.hpp>
 #include <sensor_msgs/msg/joy.hpp>
+#include <chrono>
 
-bool res;
-struct vel_commands_struct{
-  float x,y,z;
-  float wx,wy,wz;
+struct vel_commands_struct {
+  double x, y, z;
+  double wx, wy, wz;
 };
 
-vel_commands_struct vel_commands {0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 };
+class BraccioControlJoy : public rclcpp::Node
+{
+public:
+  BraccioControlJoy() : Node("braccio_control_joy")
+  {
+    publisher_ = this->create_publisher<trajectory_msgs::msg::JointTrajectory>("/braccio_controller/joint_trajectory", 10);
+    
+    joy_sub_ = this->create_subscription<sensor_msgs::msg::Joy>(
+      "/joy", 10, std::bind(&BraccioControlJoy::convertInputJoy, this, std::placeholders::_1));
+    
+    joint_sub_ = this->create_subscription<sensor_msgs::msg::JointState>(
+      "/joint_states", 10, std::bind(&BraccioControlJoy::joint_callback, this, std::placeholders::_1));
+    
+    // Get Robot Description from /robot_state_publisher
+    this->declare_parameter("robot_description", "");
+    std::string robot_description = this->get_parameter("robot_description").as_string();
+    
+    if (!kdl_parser::treeFromString(robot_description, robot_tree)) {
+      RCLCPP_ERROR(this->get_logger(), "Failed to construct kdl tree");
+      return;
+    }
 
-int convertInputJoy(const sensor_msgs::msg::Joy::SharedPtr msg){
-  int inv_z=1, inv_wz=1;
-  vel_commands.x=msg->axes[1];
-  vel_commands.y=msg->axes[0];
-  if (msg->buttons[4]==1){
-    inv_z=-1;
-  }else{
-    inv_z=1;
+    if (!robot_tree.getChain("base_link", "tool0", chain)) {
+      RCLCPP_ERROR(this->get_logger(), "Failed to get KDL chain");
+      return;
+    }
+
+    // Initialize KDL structures
+    joint_positions_current.resize(chain.getNrOfJoints());
+    joint_velocities.resize(chain.getNrOfJoints());
+    ik_vel_solver_ = std::make_shared<KDL::ChainIkSolverVel_pinv>(chain);
+
+    // Initialize Trajectory Message Headers
+    trajectory_msg.header.frame_id = "base_link";
+    for (unsigned int i = 0; i < chain.getNrOfSegments(); i++) {
+      auto joint = chain.getSegment(i).getJoint();
+      if (joint.getType() != KDL::Joint::Fixed) {
+        trajectory_msg.joint_names.push_back(joint.getName());
+      }
+    }
   }
-  vel_commands.z=static_cast<float>(inv_z*(1.0-(msg->axes[2]+1.0)/2.0));
-  vel_commands.wx=msg->axes[4];
-  vel_commands.wy=msg->axes[3];
-  if (msg->buttons[5]==1){
-    inv_wz=-1;
-  }else{
-    inv_wz=1;
+
+private:
+  void joint_callback(const sensor_msgs::msg::JointState::SharedPtr msg) 
+  {
+    // Important: Update our internal state from the actual robot state
+    // This assumes the order in JointState matches our KDL chain
+    for (unsigned int i = 0; i < msg->position.size() && i < joint_positions_current.rows(); ++i) {
+        joint_positions_current(i) = msg->position[i];
+    }
   }
-  vel_commands.wz=static_cast<float>(inv_wz*(1.0-(msg->axes[5]+1.0)/2.0));
-  std::cout<<"ok"<<std::endl;
-  return 0;
-}
 
-int main(int argc, char ** argv){
-  rclcpp::init(argc, argv);
-  auto node = std::make_shared<rclcpp::Node>("send_trajectory");
-  auto pub = node->create_publisher<trajectory_msgs::msg::JointTrajectory>(
-  "/braccio_controller/joint_trajectory", 10);
-  auto sub = node->create_subscription<sensor_msgs::msg::Joy>(
-  "/joy", 10, convertInputJoy);
+  void convertInputJoy(const sensor_msgs::msg::Joy::SharedPtr msg)
+  {
+    // 1. Reset command struct
+    vel_commands = {0,0,0,0,0,0};
+    bool active = false;
 
-  // get robot description
-  auto robot_param = rclcpp::Parameter();
-  node->declare_parameter("robot_description", rclcpp::ParameterType::PARAMETER_STRING);
-  node->get_parameter("robot_description", robot_param);
-  auto robot_description = robot_param.as_string();
+    // Mapping Joystick to Cartesian Velocities
+    vel_commands.x = msg->axes[1] * 0.1; // Scale factor 0.1 m/s
+    vel_commands.y = msg->axes[0] * 0.1;
+    
+    // Z axis control (using buttons/triggers)
+    if (msg->buttons[4]) vel_commands.z = 0.05;      // LB
+    else if (msg->axes[2] < 0.9) vel_commands.z = -0.05; // LT axis
 
-  // create kinematic chain
+    // Orientation
+    vel_commands.wx = msg->axes[4] * 0.2;
+    vel_commands.wy = msg->axes[3] * 0.2;
+
+    // Check if there is any input to avoid publishing static points
+    if (std::abs(vel_commands.x) > 0.01 || std::abs(vel_commands.y) > 0.01 || 
+        std::abs(vel_commands.z) > 0.01 || std::abs(vel_commands.wx) > 0.01) {
+        active = true;
+    }
+
+    if (!active) return;
+
+    // 2. Prepare Trajectory
+    trajectory_msg.points.clear(); 
+    trajectory_msg.header.stamp = this->now();
+
+    KDL::Twist twist;
+    twist.vel = KDL::Vector(vel_commands.x, vel_commands.y, vel_commands.z);
+    twist.rot = KDL::Vector(vel_commands.wx, vel_commands.wy, vel_commands.wz);
+
+    // 3. IK Calculation
+    // We solve for joint velocities based on current positions
+    KDL::JntArray tmp_joint_positions_current=joint_positions_current;
+
+    int ret = ik_vel_solver_->CartToJnt(tmp_joint_positions_current, twist, joint_velocities);
+    
+    if (ret >= 0) {
+      trajectory_msgs::msg::JointTrajectoryPoint point;
+      double dt = 0.1; // Look-ahead time
+
+      point.positions.resize(chain.getNrOfJoints());
+      point.velocities.resize(chain.getNrOfJoints());
+
+      for (unsigned int i = 0; i < chain.getNrOfJoints(); i++) {
+        // Position Control logic: Current Position + (Velocity * dt)
+        point.positions[i] = tmp_joint_positions_current(i) + (joint_velocities(i) * dt);
+        point.velocities[i] = joint_velocities(i);
+      }
+
+      point.time_from_start = rclcpp::Duration::from_seconds(dt);
+      trajectory_msg.points.push_back(point);
+      
+      publisher_->publish(trajectory_msg);
+    } else {
+      RCLCPP_ERROR(this->get_logger(), "IK Solver failed!");
+    }
+  }
+
+  // Members
+  rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr publisher_;
+  rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
+  rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_sub_;
+  
+  std::shared_ptr<KDL::ChainIkSolverVel_pinv> ik_vel_solver_;
+  KDL::JntArray joint_positions_current;
+  KDL::JntArray joint_velocities;
   KDL::Tree robot_tree;
   KDL::Chain chain;
-  kdl_parser::treeFromString(robot_description, robot_tree);
-  res = robot_tree.getChain("base_link", "tool0", chain);
-  if (res==false){
-    throw;
-  }
-
-  auto joint_positions = KDL::JntArray(chain.getNrOfJoints());
-  auto joint_velocities = KDL::JntArray(chain.getNrOfJoints());
-  auto twist = KDL::Twist();
-  // create KDL solvers
-  auto ik_vel_solver_ = std::make_shared<KDL::ChainIkSolverVel_pinv>(chain, 0.0000001);
-  if (ik_vel_solver_==nullptr){
-    throw;
-  }
+  vel_commands_struct vel_commands;
   trajectory_msgs::msg::JointTrajectory trajectory_msg;
-  trajectory_msg.header.stamp = node->now();
-  for (unsigned int i = 0; i < chain.getNrOfSegments(); i++){
-    auto joint = chain.getSegment(i).getJoint();
-    if (joint.getType() != KDL::Joint::Fixed){
-      trajectory_msg.joint_names.push_back(joint.getName());
-    }
-  }
+};
 
-  trajectory_msgs::msg::JointTrajectoryPoint trajectory_point_msg;
-  trajectory_point_msg.positions.resize(chain.getNrOfJoints());
-  trajectory_point_msg.velocities.resize(chain.getNrOfJoints());
-
-  double total_time = 3.0;
-  int trajectory_len = 200;
-  double dt = total_time / static_cast<double>(trajectory_len - 1);
-
-  bool calc_tray = false;
-  if (calc_tray){
-    for (int i = 0; i < trajectory_len; i++){
-      // set endpoint twist
-      double t = i / (static_cast<double>(trajectory_len - 1));
-      twist.vel.x( 1 * cos(2 * M_PI * t));
-      twist.vel.y(-1 * sin(2 * M_PI * t));
-      // twist.vel.z(-1 * sin(2 * M_PI * t));
-      twist.rot.x(2);
-
-      // convert cart to joint velocities
-      auto resu = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
-      std::cout<<"result : "<<resu<<std::endl;
-      // copy to trajectory_point_msg
-      std::memcpy(
-        trajectory_point_msg.positions.data(), joint_positions.data.data(),
-        trajectory_point_msg.positions.size() * sizeof(double));
-      std::memcpy(
-        trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
-        trajectory_point_msg.velocities.size() * sizeof(double));
-
-      // integrate joint velocities
-      joint_positions.data += joint_velocities.data * dt;
-
-      // set timing information
-      double time_point = total_time * t;
-      double time_point_sec = std::floor(time_point);
-      trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
-      trajectory_point_msg.time_from_start.nanosec =
-        static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
-      trajectory_msg.points.push_back(trajectory_point_msg);
-    }
-    // send zero velocities in the end
-    auto & last_point_msg = trajectory_msg.points.back();
-    std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
-    pub->publish(trajectory_msg);
-
-  }
-
-  int cycletime_ms = 10000; 
-
-  //TODO
-  rclcpp::spin(node);
+int main(int argc, char * argv[])
+{
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<BraccioControlJoy>());
   rclcpp::shutdown();
-
-
-  while (rclcpp::ok()){
-
-    if(!calc_tray){
-      twist.vel.x(vel_commands.x);
-      twist.vel.y(vel_commands.y);
-      twist.vel.z(vel_commands.z);
-      twist.rot.x(vel_commands.wx);
-      twist.rot.y(vel_commands.wy);
-      twist.rot.z(vel_commands.wz);
-      std::cout<<vel_commands.x<<std::endl;
-
-      auto resu = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
-      std::cout<<"result : "<<resu<<std::endl;
-      std::memcpy(
-        trajectory_point_msg.positions.data(), joint_positions.data.data(),
-        trajectory_point_msg.positions.size() * sizeof(double));
-      std::memcpy(
-        trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
-        trajectory_point_msg.velocities.size() * sizeof(double));
-
-      double time_point = cycletime_ms;
-      double time_point_sec = std::floor(time_point);
-      trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
-      trajectory_point_msg.time_from_start.nanosec =
-        static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
-      trajectory_msg.points.push_back(trajectory_point_msg);
-    }
-
-    pub->publish(trajectory_msg);
-    std::this_thread::sleep_for(std::chrono::milliseconds(cycletime_ms));
-  }
-
   return 0;
 }
