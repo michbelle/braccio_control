@@ -1,0 +1,26 @@
+[workspace]
+authors = ["michbelle <mi94bell@gmail.com>"]
+channels = ["conda-forge", "https://prefix.dev/robostack-kilted"]
+name = "braccio_control"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+# Dependencies used by all environments
+[dependencies]
+python = "*"
+# Build tools
+compilers = "*"
+cmake = "*"
+pkg-config = "*"
+make = "*"
+ninja = "*"
+# ROS specific tools
+rosdep = "*"
+colcon-common-extensions = "*"
+libgl-devel = "*"
+ros-kilted-desktop = "*"
+
+[activation]
+scripts = ["install/setup.bash"]
