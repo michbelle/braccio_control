@@ -6,11 +6,9 @@ platforms = ["linux-64"]
 version = "0.1.0"
 
 [tasks]
-#
-#   cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default
-
-#
-#
+build_zenoh_c = "mkdir -p src/zenoh-c/build && cd src/zenoh-c/build && cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default && cmake --build . --target install" 
+build_zenoh_cpp = "mkdir -p src/zenoh-cpp/build && cd src/zenoh-cpp/build && cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default && cmake --build . --target install" 
+build_ros = "colcon build --packages-select braccio_control braccio_simulation"
 
 # Dependencies used by all environments
 [dependencies]
@@ -25,7 +23,7 @@ ninja = "*"
 rosdep = "*"
 colcon-common-extensions = "*"
 libgl-devel = "*"
-ros-kilted-desktop = "*"
+ros-kilted-desktop = ">=0.12.0,<0.13"
 zenoh = ">=1.9.0,<2"
 rust = ">=1.94.0,<1.95"
 ros-kilted-ros2-control = ">=5.12.0,<6"
@@ -65,3 +63,4 @@ ros-kilted-ament-cmake = ">=2.7.5,<3"
 
 [activation]
 scripts = ["install/setup.bash"]
+# eval "$(register-python-argcomplete ros2)"
