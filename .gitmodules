@@ -1,3 +1,7 @@
 [submodule "src/zenoh-cpp"]
 	path = src/zenoh-cpp
 	url = https://github.com/eclipse-zenoh/zenoh-cpp.git
+
+[submodule "src/zenoh-c"]
+	path = src/zenoh-c
+	url = https://github.com/eclipse-zenoh/zenoh-c.git
