@@ -5,6 +5,8 @@ find_package(ros2_control_cmake REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 
+find_package(urdf REQUIRED)
+
 set_compiler_options()
 export_windows_symbols()
 
@@ -51,11 +53,17 @@ endforeach()
 ## COMPILE
 add_executable(send_trajectory reference_generator/send_trajectory.cpp)
 
+# ament_target_dependencies(send_trajectory rclcpp urdf kdl_parser sensor_msgs)
+# target_include_directories(send_trajectory PRIVATE
+#   $<TARGET_PROPERTY:urdf,INTERFACE_INCLUDE_DIRECTORIES>
+# )
+
 target_link_libraries(send_trajectory PUBLIC
   ${trajectory_msgs_TARGETS}
   kdl_parser::kdl_parser
   rclcpp::rclcpp
   sensor_msgs::sensor_msgs_library
+  urdf::urdf
 )
 
 

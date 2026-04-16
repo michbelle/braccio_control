@@ -1,0 +1,35 @@
+joy_arm_controller:
+  ros__parameters:
+    base_link: "base_link"
+    ee_link: "tool0"
+    gripper_joint: "finger_joint"
+    arm_joint_names: []          # empty = auto-detect from KDL chain
+
+    arm_controller_topic: "/joint_trajectory_controller/joint_trajectory"
+    gripper_controller_topic: "/gripper_controller/joint_trajectory"
+
+    control_rate_hz: 50.0
+    trajectory_horizon_s: 0.20   # look-ahead for trajectory waypoint
+
+    max_lin_vel: 0.10            # m/s
+    max_ang_vel: 0.50            # rad/s
+    max_grip_vel: 0.05           # rad/s
+    max_dq_per_cycle: 0.10       # rad – per-joint safety cap
+
+    ik_eps: 1.0e-5
+    ik_max_iterations: 500
+
+    joystick_deadzone: 0.05
+
+    # PS4 / Xbox gamepad via joy_node (check with ros2 topic echo /joy)
+    joy_axis_tx: 1               # left stick Y  → X forward
+    joy_axis_ty: 0               # left stick X  → Y lateral
+    joy_axis_tz: 4               # right stick Y → Z vertical
+    joy_axis_rx: 7               # D-pad Y       → tool roll
+    joy_axis_ry: 6               # D-pad X       → tool pitch
+    joy_axis_rz: 3               # right stick X → tool yaw
+    joy_axis_grip_open:  5       # R2 trigger
+    joy_axis_grip_close: 2       # L2 trigger
+
+    gripper_min_pos: 0.0
+    gripper_max_pos: 0.8

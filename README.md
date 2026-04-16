@@ -12,6 +12,12 @@ rosdep install --from-paths src -y --ignore-src
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
+
+## pixi autocomplete
+```bash
+eval "$(register-python-argcomplete ros2)"
+```
+
 potrebbe essere che il submodule fallisce di `cmake build`
 
 ## install zenoh

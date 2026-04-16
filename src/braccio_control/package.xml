@@ -26,6 +26,9 @@
   <depend>joy</depend>
   <depend>sensor_msgs</depend>
 
+  <build_depend>urdf</build_depend>
+  <exec_depend>urdf</exec_depend>
+
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
