@@ -18,7 +18,12 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 eval "$(register-python-argcomplete ros2)"
 ```
 
-potrebbe essere che il submodule fallisce di `cmake build`
+### pixi build zenoh-c
+```bash
+cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default/
+cmake --build . --target install
+```
+
 
 ## install zenoh
 curl -L https://download.eclipse.org/zenoh/debian-repo/zenoh-public-key | sudo gpg --dearmor --yes --output /etc/apt/keyrings/zenoh-public-key.gpg
@@ -93,13 +98,13 @@ xhost local:root
 
 
 ```bash
-colcon build --symlink-install --packages-select braccio_simulation
+colcon build --symlink-install --packages-select braccio_simulation braccio_control
 ```
 
 build zenoh-cpp
 install in /usr/local
 ```bash
 mkdir build && cd build
-cmake ..
-sudo cmake --install .
+cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default/
+cmake --build . --target install
 ```

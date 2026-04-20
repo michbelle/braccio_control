@@ -8,7 +8,7 @@
 #include <kdl/chainfksolverpos_recursive.hpp>
 #include <kdl/chainiksolverpos_lma.hpp>
 #include <kdl/jntarray.hpp>
-#include <urdf/model.h>
+#include <urdf/model.hpp>
 
 #include <Eigen/Dense>
 #include <algorithm>

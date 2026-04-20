@@ -10,7 +10,8 @@
                 "/usr/include/**",
                 "${workspaceFolder}/src/braccio_control/controller/include/**",
                 "${workspaceFolder}/src/braccio_control/hardware/include",
-                "${workspaceFolder}/src/zenoh-cpp/include"
+                "${workspaceFolder}/src/zenoh-cpp/include",
+                "${workspaceFolder}/.pixi/envs/default/include"
             ],
             "name": "ros2",
             "intelliSenseMode": "gcc-x64",
