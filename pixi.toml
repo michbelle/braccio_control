@@ -8,7 +8,7 @@ version = "0.1.0"
 [tasks]
 build_zenoh_c = "mkdir -p src/zenoh-c/build && cd src/zenoh-c/build && cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default && cmake --build . --target install" 
 build_zenoh_cpp = "mkdir -p src/zenoh-cpp/build && cd src/zenoh-cpp/build && cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default && cmake --build . --target install" 
-build_ros = "colcon build --packages-select braccio_control braccio_simulation"
+build_ros = "colcon build --symlink-install --packages-select braccio_control braccio_simulation braccio_moveit"
 run_ctrl = "ros2 launch braccio_control braccio_controller.launch.py"
 run = "ros2 launch braccio_control send_trajectory.launch.py"
 run_joy = "ros2 run joy joy_node"

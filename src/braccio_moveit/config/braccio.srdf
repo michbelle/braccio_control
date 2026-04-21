@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="braccio">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="braccio_arm_ctrl">
+        <joint name="vrt"/>
+        <joint name="world_joint"/>
+        <joint name="baseup_link"/>
+        <joint name="arm_rot"/>
+        <joint name="arm_1_up_down"/>
+        <joint name="arm_1_up_down_2"/>
+        <joint name="arm_2_up_down"/>
+        <joint name="arm_3_up_down"/>
+        <joint name="supServoRot"/>
+        <joint name="rot_grasp"/>
+    </group>
+    <group name="grasp_ctrl">
+        <link name="grasp_l"/>
+        <link name="grasp_r"/>
+        <link name="tool0"/>
+        <link name="grasp_box"/>
+    </group>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="too0" parent_link="tool0" group="grasp_ctrl"/>
+    <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
+    <virtual_joint name="vrt" type="fixed" parent_frame="world0" child_link="world"/>
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="arm_1_up_down_p1" link2="arm_1_up_down_p2" reason="Adjacent"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="arm_2_up_down" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="arm_3_up_down" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="base_link" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="base_servo_ud" reason="Adjacent"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="box_servo_rot" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="grasp_box" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p1" link2="rot_grasp" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="arm_2_up_down" reason="Adjacent"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="arm_3_up_down" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="base_servo_ud" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="box_servo_rot" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="grasp_box" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="arm_1_up_down_p2" link2="rot_grasp" reason="Never"/>
+    <disable_collisions link1="arm_2_up_down" link2="arm_3_up_down" reason="Adjacent"/>
+    <disable_collisions link1="arm_2_up_down" link2="base_servo_ud" reason="Never"/>
+    <disable_collisions link1="arm_2_up_down" link2="base_vert_servo_rot" reason="Never"/>
+    <disable_collisions link1="arm_2_up_down" link2="box_servo_rot" reason="User"/>
+    <disable_collisions link1="arm_2_up_down" link2="grasp_box" reason="Never"/>
+    <disable_collisions link1="arm_2_up_down" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="arm_2_up_down" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="arm_2_up_down" link2="rot_grasp" reason="Never"/>
+    <disable_collisions link1="arm_3_up_down" link2="base_servo_ud" reason="Never"/>
+    <disable_collisions link1="arm_3_up_down" link2="base_vert_servo_rot" reason="Never"/>
+    <disable_collisions link1="arm_3_up_down" link2="box_servo_rot" reason="Adjacent"/>
+    <disable_collisions link1="arm_3_up_down" link2="grasp_box" reason="Never"/>
+    <disable_collisions link1="arm_3_up_down" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="arm_3_up_down" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="arm_3_up_down" link2="rot_grasp" reason="Never"/>
+    <disable_collisions link1="base_link" link2="base_servo_ud" reason="Never"/>
+    <disable_collisions link1="base_link" link2="base_vert_servo_rot" reason="Adjacent"/>
+    <disable_collisions link1="base_servo_ud" link2="base_vert_servo_rot" reason="Adjacent"/>
+    <disable_collisions link1="base_servo_ud" link2="box_servo_rot" reason="Never"/>
+    <disable_collisions link1="base_servo_ud" link2="grasp_box" reason="Never"/>
+    <disable_collisions link1="base_servo_ud" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="base_servo_ud" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="base_servo_ud" link2="rot_grasp" reason="Never"/>
+    <disable_collisions link1="base_vert_servo_rot" link2="box_servo_rot" reason="Never"/>
+    <disable_collisions link1="base_vert_servo_rot" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="base_vert_servo_rot" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="box_servo_rot" link2="grasp_box" reason="Never"/>
+    <disable_collisions link1="box_servo_rot" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="box_servo_rot" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="box_servo_rot" link2="rot_grasp" reason="Adjacent"/>
+    <disable_collisions link1="grasp_box" link2="grasp_l" reason="Never"/>
+    <disable_collisions link1="grasp_box" link2="grasp_r" reason="Never"/>
+    <disable_collisions link1="grasp_box" link2="rot_grasp" reason="Adjacent"/>
+    <disable_collisions link1="grasp_l" link2="grasp_r" reason="Default"/>
+    <disable_collisions link1="grasp_l" link2="rot_grasp" reason="Adjacent"/>
+    <disable_collisions link1="grasp_r" link2="rot_grasp" reason="Adjacent"/>
+</robot>

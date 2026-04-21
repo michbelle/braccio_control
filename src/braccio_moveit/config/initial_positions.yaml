@@ -1,0 +1,9 @@
+# Default initial positions for braccio's ros2_control fake system
+
+initial_positions:
+  arm_1_up_down: 0
+  arm_2_up_down: 0
+  arm_3_up_down: 0
+  arm_rot: 0
+  grasp_ctrl: 0
+  rot_grasp: 0

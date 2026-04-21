@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: braccio_simulation
+    relative_path: model/urdf/braccio.urdf.xacro
+  srdf:
+    relative_path: config/braccio.srdf
+  package_settings:
+    author_name: mich
+    author_email: mich@me.me
+    generated_timestamp: 1776792991
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
