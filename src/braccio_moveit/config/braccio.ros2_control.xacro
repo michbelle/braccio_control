@@ -13,42 +13,36 @@
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['arm_rot']}</param>
                 </state_interface>
-                <state_interface name="velocity"/>
             </joint>
             <joint name="arm_1_up_down">
                 <command_interface name="position"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['arm_1_up_down']}</param>
                 </state_interface>
-                <state_interface name="velocity"/>
             </joint>
             <joint name="arm_2_up_down">
                 <command_interface name="position"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['arm_2_up_down']}</param>
                 </state_interface>
-                <state_interface name="velocity"/>
             </joint>
             <joint name="arm_3_up_down">
                 <command_interface name="position"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['arm_3_up_down']}</param>
                 </state_interface>
-                <state_interface name="velocity"/>
             </joint>
             <joint name="rot_grasp">
                 <command_interface name="position"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['rot_grasp']}</param>
                 </state_interface>
-                <state_interface name="velocity"/>
             </joint>
             <joint name="grasp_ctrl">
                 <command_interface name="position"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['grasp_ctrl']}</param>
                 </state_interface>
-                <state_interface name="velocity"/>
             </joint>
 
         </ros2_control>

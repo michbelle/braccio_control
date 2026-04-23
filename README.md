@@ -98,7 +98,7 @@ xhost local:root
 
 
 ```bash
-colcon build --symlink-install --packages-select braccio_simulation braccio_control
+colcon build --symlink-install --packages-select braccio_simulation braccio_control braccio_moveit
 ```
 
 build zenoh-cpp

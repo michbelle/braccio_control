@@ -12,6 +12,7 @@ build_ros = "colcon build --symlink-install --packages-select braccio_control br
 run_ctrl = "ros2 launch braccio_control braccio_controller.launch.py"
 run = "ros2 launch braccio_control send_trajectory.launch.py"
 run_joy = "ros2 run joy joy_node"
+run_moveit_demo = "LC_ALL=C ros2 launch braccio_moveit demo.launch.py"
 
 # Dependencies used by all environments
 [dependencies]
@@ -74,6 +75,8 @@ ros-kilted-moveit-ros-visualization = ">=2.14.3,<3"
 ros-kilted-moveit-ros-warehouse = ">=2.14.3,<3"
 ros-kilted-rviz-common = ">=15.0.12,<16"
 ros-kilted-rviz-default-plugins = ">=15.0.12,<16"
+ros-kilted-moveit-ros-perception = ">=2.14.3,<3"
+ros-kilted-joint-trajectory-controller = ">=5.13.1,<6"
 
 # pixi add ros-kilted-joy-linux
 # pixi add ros-kilted-liburdfdom
