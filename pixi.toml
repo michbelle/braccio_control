@@ -13,6 +13,9 @@ run_ctrl = "ros2 launch braccio_control braccio_controller.launch.py"
 run = "ros2 launch braccio_control send_trajectory.launch.py"
 run_joy = "ros2 run joy joy_node"
 run_moveit_demo = "LC_ALL=C ros2 launch braccio_moveit demo.launch.py"
+#
+# eval "$(register-python-argcomplete ros2)"
+
 
 # Dependencies used by all environments
 [dependencies]

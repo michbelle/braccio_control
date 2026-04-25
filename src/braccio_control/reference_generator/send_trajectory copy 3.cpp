@@ -21,7 +21,7 @@ public:
 
         KDL::Tree tree;
         kdl_parser::treeFromString(urdf_xml, tree);
-        tree.getChain("base_link", "tool0", chain_);
+        tree.getChain("base_servo_ud", "tool01", chain_);
 
         // Initialize Solvers
         fk_solver_ = std::make_unique<KDL::ChainFkSolverPos_recursive>(chain_);
@@ -32,7 +32,7 @@ public:
         current_joints_.resize(nj);
         target_joints_.resize(nj);
         // joint_names_ = {"arm_rot", "arm_1_up_down", "arm_2_up_down", "arm_3_up_down", "rot_grasp", "grasp_ctrl"}; // Match your URDF
-        joint_names_ = {"arm_rot", "arm_1_up_down", "arm_2_up_down", "arm_3_up_down", "rot_grasp"}; // Match your URDF
+        joint_names_ = {"arm_1_up_down", "arm_2_up_down", "arm_3_up_down"}; // Match your URDF
 
         // Publisher to ros2_control controller
         target_pub_ = this->create_publisher<trajectory_msgs::msg::JointTrajectory>(

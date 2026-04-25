@@ -74,7 +74,7 @@ int main(int argc, char ** argv){
   KDL::Tree robot_tree;
   KDL::Chain chain;
   kdl_parser::treeFromString(robot_description, robot_tree);
-  res = robot_tree.getChain("base_link", "tool0", chain);
+  res = robot_tree.getChain("base_servo_ud", "tool01", chain);
   if (res==false){
     throw;
   }

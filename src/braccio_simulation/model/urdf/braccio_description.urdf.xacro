@@ -113,7 +113,7 @@
 
     <joint name="arm_rot" type="revolute">
       <axis xyz="0 0 1"/>
-      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5" acceleration="1.0"/>
       <parent link="base_vert_servo_rot"/>
       <child link="base_servo_ud"/>
       <origin xyz="-0.012 0 0.025"/>
@@ -121,7 +121,7 @@
 
     <joint name="arm_1_up_down" type="revolute">
       <axis xyz="0 1 0"/>
-      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5" acceleration="1.0"/>
       <parent link="base_servo_ud"/>
       <child link="arm_1_up_down_p1"/>
       <origin xyz="0.011 0.013 0.014"/>
@@ -135,7 +135,7 @@
 
     <joint name="arm_2_up_down" type="revolute">
       <axis xyz="0 1 0"/>
-      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5" acceleration="1.0"/>
       <parent link="arm_1_up_down_p2"/>
       <child link="arm_2_up_down"/>
       <origin xyz="0.0 0.0 0"/>
@@ -143,7 +143,7 @@
 
     <joint name="arm_3_up_down" type="revolute">
       <axis xyz="0 1 0"/>
-      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5" acceleration="1.0"/>
       <parent link="arm_2_up_down"/>
       <child link="arm_3_up_down"/>
       <origin xyz="0.091 0 0"/>
@@ -157,7 +157,7 @@
 
     <joint name="rot_grasp" type="revolute">
       <axis xyz="1 0 0"/>
-      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5"/>
+      <limit effort="1000.0" lower="-${pi2}" upper="${pi2}" velocity="0.5" acceleration="1.0"/>
       <parent link="box_servo_rot"/>
       <child link="rot_grasp"/>
       <origin xyz="0.028 -0.011 0"/>
@@ -175,6 +175,7 @@
         lower="0"
         upper="0.03"
         velocity="2.0"
+        acceleration="1.0"
         effort="1000" />
       <parent link="rot_grasp"/>
       <child link="grasp_l"/>
@@ -187,6 +188,7 @@
         lower="0"
         upper="0.03"
         velocity="2.0"
+         acceleration="1.0"
         effort="1000" />
       <parent link="rot_grasp"/>
       <child link="grasp_r"/>
@@ -203,6 +205,14 @@
     <parent link="rot_grasp"/>
     <child link="tool0"/>
     <origin xyz="0.07 0 0" rpy="0 0 0"/>
+  </joint>
+  
+  <link name="tool01"/>
+  <joint name="joint-tool01" type="fixed">
+    <parent link="box_servo_rot"/>
+    <child link="tool01"/>
+    <!-- 0.03 0.025 0.0165 -->
+    <origin xyz="0.098 -0.011 0" rpy="0 0 0"/>
   </joint>
 
   </xacro:macro>

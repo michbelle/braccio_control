@@ -1,8 +1,8 @@
 joy_arm_controller:
   ros__parameters:
-    base_link: "base_link"
-    ee_link: "tool0"
-    gripper_joint: "finger_joint"
+    base_link: "base_servo_ud"
+    ee_link: "tool01"
+    gripper_joint: "tool01"
     arm_joint_names: []          # empty = auto-detect from KDL chain
 
     arm_controller_topic: "/joint_trajectory_controller/joint_trajectory"
