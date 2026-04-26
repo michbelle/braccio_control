@@ -32,7 +32,13 @@ struct vel_commands_struct{
   double x,y,z;
   double wx,wy,wz;
 };
+struct pos_commands_struct{
+  double rz,up1,up2,up3,gr,gc;
+};
 
+std::vector<std::string> joint_names_ = {"arm_rot", "arm_1_up_down", "arm_2_up_down", "arm_3_up_down", "rot_grasp", "grasp_ctrl"};
+
+pos_commands_struct pos = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 class braccio_control_joy : public rclcpp::Node
 {
@@ -53,7 +59,7 @@ public:
     auto robot_description = robot_param.as_string();
     kdl_parser::treeFromString(robot_description, robot_tree);
     // res = robot_tree.getChain("base_servo_ud", "tool01", chain);
-    res = robot_tree.getChain("base_link", "tool0", chain);
+    res = robot_tree.getChain("base_servo_ud", "tool01", chain);
     if (res==false){
       throw;
     }
@@ -61,21 +67,20 @@ public:
     joint_velocities = KDL::JntArray(chain.getNrOfJoints());
     twist = KDL::Twist();
     // create KDL solvers
-    ik_vel_solver_ = std::make_shared<KDL::ChainIkSolverVel_pinv>(chain, 0.0000001);
+    ik_vel_solver_ = std::make_shared<KDL::ChainIkSolverVel_pinv>(chain);
     if (ik_vel_solver_==nullptr){
       throw;
     }
     // trajectory_msgs::msg::JointTrajectory trajectory_msg;
-    trajectory_msg.header.stamp = this->now();
-    for (unsigned int i = 0; i < chain.getNrOfSegments(); i++){
-      auto joint = chain.getSegment(i).getJoint();
-      if (joint.getType() != KDL::Joint::Fixed){
-        trajectory_msg.joint_names.push_back(joint.getName());
-      }
-    }
+    // for (unsigned int i = 0; i < chain.getNrOfSegments(); i++){
+    //   auto joint = chain.getSegment(i).getJoint();
+    //   if (joint.getType() != KDL::Joint::Fixed){
+    //     trajectory_msg.joint_names.push_back(joint.getName());
+    //   }
+    // }
     // trajectory_msgs::msg::JointTrajectoryPoint trajectory_point_msg;
-    trajectory_point_msg.positions.resize(chain.getNrOfJoints());
-    trajectory_point_msg.velocities.resize(chain.getNrOfJoints());
+    // trajectory_point_msg.positions.resize(chain.getNrOfJoints());
+    // trajectory_point_msg.velocities.resize(chain.getNrOfJoints());
   }
 
 
@@ -89,24 +94,26 @@ public:
 
   bool cnv_msg_joy(const sensor_msgs::msg::Joy::SharedPtr msg){
     vel_commands = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    if (msg->axes[1]!=0){
-      vel_commands.x=msg->axes[1]*0.01;
-      return true;
+    bool update = false;
+    if (msg->axes[1]>0.1||msg->axes[1]<-0.1){
+          RCLCPP_WARN(this->get_logger(), "----- %f ------",msg->axes[1]);
+      vel_commands.x=msg->axes[1];
+      update = true;
     }
-    if (msg->axes[0]!=0){
-      vel_commands.wx=msg->axes[0]*0.01;
-      return true;
+    if (msg->axes[0]>0.1||msg->axes[0]<-0.1){
+      vel_commands.wx=msg->axes[0];
+      update = true;
     }
-    if (msg->axes[4]!=0){
-      vel_commands.wx=msg->axes[4]*0.01;
-      return true;
+    if (msg->axes[4]>0.1||msg->axes[4]<-0.1){
+      vel_commands.wx=msg->axes[4];
+      update = true;
     }
     vel_commands.wy=msg->axes[3];
-    if (msg->axes[3]!=0){
+    if (msg->axes[3]>0.1||msg->axes[3]<-0.1){
       vel_commands.wy=msg->axes[3];
-      return true;
+      update = true;
     }
-    return false;
+    return update;
 
   }
 
@@ -114,22 +121,91 @@ public:
     
     cnv_msg_joy(msg);
     if (!cnv_msg_joy(msg)){return 0;}
-
-    int trajectory_len = 2;
-    double total_time = 0.5;
-    double dt = total_time / static_cast<double>(trajectory_len - 1);
-
+    trajectory_msgs::msg::JointTrajectory trajectory_msg;
+    trajectory_msg.joint_names = joint_names_;
+    trajectory_msgs::msg::JointTrajectoryPoint trajectory_point_msg;
     
+      for (const std::string &s : joint_names_) {
+        double val=0.0;
+        double valv=0.0;
+
+        if (s == "arm_rot"){
+          val=pos.rz;
+          valv=0.0;
+        }else if (s=="arm_1_up_down"){
+          // val=joint_positions(0);
+          // valv=joint_velocities(0);
+        }else if (s=="arm_2_up_down"){
+          // val=joint_positions(1);
+          // valv=joint_velocities(1);
+        }else if (s=="arm_3_up_down"){
+          // val=joint_positions(2);
+          // valv=joint_velocities(2);
+        }else if (s=="rot_grasp"){
+          val=pos.gr;
+          valv=0.0;
+        }else if (s=="grasp_ctrl"){
+          val=pos.gc;
+          valv=0.0;
+        }
+        trajectory_point_msg.positions.push_back(val);
+          RCLCPP_WARN(this->get_logger(), "%s", s.c_str());
+          RCLCPP_WARN(this->get_logger(), "%f",val);
+        trajectory_point_msg.velocities.push_back(valv);
+          RCLCPP_WARN(this->get_logger(), "%f", valv);
+      }
+      double time_point = 0.25;
+      double time_point_sec = std::floor(time_point);
+      trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
+      trajectory_point_msg.time_from_start.nanosec =
+        static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
+      trajectory_msg.points.push_back(trajectory_point_msg);
+
+    int trajectory_len = 1;
+    // double total_time = 0.5;
+    // double dt = total_time / static_cast<double>(trajectory_len - 1);
+
+    double max_v = 0.01;
+    double tmp = 0.0;
+    tmp=pos.rz+max_v*vel_commands.x;
+    if (tmp>3.14||tmp<-3.14){
+      pos.rz = 3.14;
+    }else{
+      pos.rz=tmp;
+    }
+    pos.up1 = 0.0;
+    pos.up2 = 0.0;
+    pos.up3 = 0.0;
+
+    tmp=pos.gr+max_v*vel_commands.wx;
+    if (tmp>3.14||tmp<-3.14){
+      pos.gr = 3.14;
+    }else{
+      pos.gr=tmp;
+    }
+
+    tmp=pos.gc+max_v*vel_commands.wy;
+    if (tmp>3.14||tmp<-3.14){
+      pos.gc = 3.14;
+    }else{
+      pos.gc=tmp;
+    }
 
     for (int i = 0; i < trajectory_len; i++){
       double fraction = i / (static_cast<double>(trajectory_len - 1));
       
-      twist.vel.x(vel_commands.x*fraction);
-      twist.vel.y(vel_commands.y*fraction);
-      twist.vel.z(vel_commands.z*fraction);
-      twist.rot.x(vel_commands.wx*fraction);
-      twist.rot.y(vel_commands.wy*fraction);
-      twist.rot.z(vel_commands.wz*fraction);
+      // twist.vel.x(vel_commands.x*fraction);
+      // twist.vel.y(vel_commands.y*fraction);
+      // twist.vel.z(vel_commands.z*fraction);
+      // twist.rot.x(vel_commands.wx*fraction);
+      // twist.rot.y(vel_commands.wy*fraction);
+      // twist.rot.z(vel_commands.wz*fraction);
+      twist.vel.x(1.0);
+      twist.vel.y(0.0*fraction);
+      twist.vel.z(0.0);
+      twist.rot.x(0.0);
+      twist.rot.y(0.0);
+      twist.rot.z(0.0);
       
     
       int ik_status = ik_vel_solver_->CartToJnt(joint_positions, twist, joint_velocities);
@@ -138,29 +214,69 @@ public:
             return -1;
         }
       // copy to trajectory_point_msg
-      std::memcpy(
-        trajectory_point_msg.positions.data(), joint_positions.data.data(),
-        trajectory_point_msg.positions.size() * sizeof(double));
-      std::memcpy(
-        trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
-        trajectory_point_msg.velocities.size() * sizeof(double));
+      // std::memcpy(
+      //   trajectory_point_msg.positions.data(), joint_positions.data.data(),
+      //   trajectory_point_msg.positions.size() * sizeof(double));
+      // std::memcpy(
+      //   trajectory_point_msg.velocities.data(), joint_velocities.data.data(),
+      //   trajectory_point_msg.velocities.size() * sizeof(double));
+      
+        
+    trajectory_msgs::msg::JointTrajectoryPoint trajectory_point_msg2;
+      for (const std::string &s : joint_names_) {
+        double val=0.0;
+        double valv=0.0;
+
+        if (s == "arm_rot"){
+          val=pos.rz;
+          valv=0.0;
+        }else if (s=="arm_1_up_down"){
+
+          val=0.0;
+          valv=0.0;
+          // val=joint_positions(0);
+          // valv=joint_velocities(0);
+        }else if (s=="arm_2_up_down"){
+          val=0.0;
+          valv=0.0;
+          // val=joint_positions(1);
+          // valv=joint_velocities(1);
+        }else if (s=="arm_3_up_down"){
+          val=0.0;
+          valv=0.0;
+          // val=joint_positions(2);
+          // valv=joint_velocities(2);
+        }else if (s=="rot_grasp"){
+          val=pos.gr;
+          valv=0.0;
+        }else if (s=="grasp_ctrl"){
+          val=pos.gc;
+          valv=0.0;
+        }
+        trajectory_point_msg2.positions.push_back(val);
+          RCLCPP_WARN(this->get_logger(), "%s", s.c_str());
+          RCLCPP_WARN(this->get_logger(), "%f",val);
+        trajectory_point_msg2.velocities.push_back(valv);
+          RCLCPP_WARN(this->get_logger(), "%f", valv);
+      }
+
 
       // integrate joint velocities
-      joint_positions.data += joint_velocities.data * dt;
+      // joint_positions.data += joint_velocities.data * dt;
 
       // set timing information
-      double time_point = 0.2;
-      double time_point_sec = std::floor(time_point);
-      trajectory_point_msg.time_from_start.sec = static_cast<int>(time_point_sec);
-      trajectory_point_msg.time_from_start.nanosec =
+      time_point = 0.5;
+      time_point_sec = std::floor(time_point);
+      trajectory_point_msg2.time_from_start.sec = static_cast<int>(time_point_sec);
+      trajectory_point_msg2.time_from_start.nanosec =
         static_cast<uint32_t>((time_point - time_point_sec) * 1E9);
-      trajectory_msg.points.push_back(trajectory_point_msg);
+      trajectory_msg.points.push_back(trajectory_point_msg2);
       // send zero velocities in the end
     }
-    auto & last_point_msg = trajectory_msg.points.back();
-    std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
+    // auto & last_point_msg = trajectory_msg.points.back();
+    // std::fill(last_point_msg.velocities.begin(), last_point_msg.velocities.end(), 0.0);
     this->publisher_->publish(trajectory_msg);
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     return 0;
   }
 
@@ -176,8 +292,8 @@ private:
   KDL::Chain chain;
   vel_commands_struct vel_commands {0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 };
   bool res;
-  trajectory_msgs::msg::JointTrajectory trajectory_msg;
-  trajectory_msgs::msg::JointTrajectoryPoint trajectory_point_msg;
+  // trajectory_msgs::msg::JointTrajectory trajectory_msg;
+  // trajectory_msgs::msg::JointTrajectoryPoint trajectory_point_msg;
     
 };
 
