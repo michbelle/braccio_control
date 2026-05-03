@@ -7,6 +7,11 @@ find_package(rclcpp REQUIRED)
 
 find_package(urdf REQUIRED)
 
+find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
+
 set_compiler_options()
 export_windows_symbols()
 
@@ -132,6 +137,18 @@ install(TARGETS braccio_control
 install(DIRECTORY
   rviz
   DESTINATION share/${PROJECT_NAME})
+
+install(
+  FILES package.xml
+  DESTINATION share/${PROJECT_NAME}
+)
+
+ament_python_install_package(${PROJECT_NAME})
+install(PROGRAMS
+  braccio_control/send_trajectory_py.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)

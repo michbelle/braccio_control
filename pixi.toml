@@ -8,11 +8,15 @@ version = "0.1.0"
 [tasks]
 build_zenoh_c = "mkdir -p src/zenoh-c/build && cd src/zenoh-c/build && cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default && cmake --build . --target install" 
 build_zenoh_cpp = "mkdir -p src/zenoh-cpp/build && cd src/zenoh-cpp/build && cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default && cmake --build . --target install" 
+# build_ros = "colcon build --symlink-install --packages-select braccio_control braccio_simulation braccio_moveit --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
 build_ros = "colcon build --symlink-install --packages-select braccio_control braccio_simulation braccio_moveit"
 run_ctrl = "ros2 launch braccio_control braccio_controller.launch.py"
-run = "ros2 launch braccio_control send_trajectory.launch.py"
+# run = "ros2 launch braccio_control send_trajectory.launch.py"
+run = "python src/braccio_control/braccio_control/send_trajectory_py.py"
 run_joy = "ros2 run joy joy_node"
 run_moveit_demo = "LC_ALL=C ros2 launch braccio_moveit demo.launch.py"
+#
+clean_r = "rm -r build log install"
 #
 # eval "$(register-python-argcomplete ros2)"
 
@@ -80,6 +84,8 @@ ros-kilted-rviz-common = ">=15.0.12,<16"
 ros-kilted-rviz-default-plugins = ">=15.0.12,<16"
 ros-kilted-moveit-ros-perception = ">=2.14.3,<3"
 ros-kilted-joint-trajectory-controller = ">=5.13.1,<6"
+ros-kilted-ament-cmake-python = ">=2.7.5,<3"
+scipy = ">=1.17.1,<2"
 
 # pixi add ros-kilted-joy-linux
 # pixi add ros-kilted-liburdfdom
