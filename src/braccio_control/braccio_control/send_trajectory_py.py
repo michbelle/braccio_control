@@ -47,12 +47,12 @@ class Joy_struct():
     reset : bool = False
     
     def hasMoved(self) -> bool:
-        if abs(self.x)>0.02 or \
-            abs(self.z)>0.02 or \
-            abs(self.a)>0.02 or \
-            abs(self.rz)>0.02 or \
-            abs(self.gr)>0.02 or \
-            abs(self.gc)>0.02 or \
+        if abs(self.x)>0.2 or \
+            abs(self.z)>0.2 or \
+            abs(self.a)>0.2 or \
+            abs(self.rz)>0.2 or \
+            abs(self.gr)>0.2 or \
+            abs(self.gc)>0.2 or \
             self.reset:
                 return True
         else:
@@ -64,6 +64,11 @@ class position_solver_struct():
     x : float = 0.106+0.091+0.140
     z : float = 0.0
     a : float = 0.0
+    
+    def init_0pos(self):
+        self.x=0.106+0.091+0.140
+        self.z=0.0
+        self.a=0.0
 
 from sensor_msgs.msg import Joy, JointState
 from trajectory_msgs.msg import JointTrajectory
@@ -102,6 +107,7 @@ class braccio_control_SendTraj(Node):
         self.timer = self.create_timer(self.timer_period, self.timerCall)
 
         self.max_velocity=0.1#rad/s
+        self.max_velocity_pl=0.01
         
         self._sendResTraj = self.create_publisher(Bool, "/braccio_controller/GenerationTrajResult", 10)
         
@@ -167,6 +173,8 @@ class braccio_control_SendTraj(Node):
                 JoiTrPnt2.positions.append(pos)
                 JoiTrPnt2.velocities.append(0.0)
             
+            self.actual_pos_solver.init_0pos()
+            
         
         self.lastJointTraj=JoiTrPnt2
         
@@ -199,39 +207,44 @@ class braccio_control_SendTraj(Node):
         nextpos.gc=gc
         
         if abs(joy_inp.x)<0.2:
-             joy_inp.x=0.0
+            joy_inp.x=0.0
         if abs(joy_inp.z)<0.2:
-             joy_inp.z=0.0
+            joy_inp.z=0.0
         if abs(joy_inp.a)<0.2:
-             joy_inp.a=0.0
-        
-        dx = joy_inp.x*self.max_velocity*(self.timer_period/2)
-        dz = joy_inp.z*self.max_velocity*(self.timer_period/2)
-        da = joy_inp.a*self.max_velocity*(self.timer_period/2)
-        
-        print(dx, dz, da)
-        
-        x=self.actual_pos_solver.x+dx
-        z=self.actual_pos_solver.z+dz
-        a=self.actual_pos_solver.a+da
-        
-        print("req", x, z , a)
-        sol=self.solve_trig_system(x, z, a)
-        
-        if sol != None:
-            a1, a2, a3 = sol
-            self.actual_pos_solver.x=x
-            self.actual_pos_solver.z=z
-            self.actual_pos_solver.a=a
-            nextpos.up1 = -a1
-            nextpos.up2 = -a2
-            nextpos.up3 = -a3
-            print("ax",a1 , a2 , a3)
+            joy_inp.a=0.0
+             
+        if abs(joy_inp.x)>0.2 or abs(joy_inp.z) > 0.2 or abs(joy_inp.a)>0.2:
+            dx = joy_inp.x*self.max_velocity_pl*(self.timer_period/2)
+            dz = joy_inp.z*self.max_velocity_pl*(self.timer_period/2)
+            da = joy_inp.a*self.max_velocity_pl*(self.timer_period/2)
             
-            print("x", 0.106*np.cos(a1) + 0.091*np.cos(a2) + 0.140*np.cos(a3))
-            print("y",0.106*np.sin(a1) + 0.091*np.sin(a2) + 0.140*np.sin(a3))
-            print("a",a1 + a2 + a3)
-            print("------------------------------------")
+            print(dx, dz, da)
+            
+            x=self.actual_pos_solver.x+dx
+            z=self.actual_pos_solver.z+dz
+            a=self.actual_pos_solver.a+da
+            
+            print("req", x, z , a)
+            sol=self.solve_trig_system(x, z, a)
+            
+            if sol != None:
+                a1, a2, a3 = sol
+                self.actual_pos_solver.x=x
+                self.actual_pos_solver.z=z
+                self.actual_pos_solver.a=a
+                nextpos.up1 = -a1
+                nextpos.up2 = -a2
+                nextpos.up3 = -a3
+                print("ax",a1 , a2 , a3)
+                
+                print("x", 0.106*np.cos(a1) + 0.091*np.cos(a2) + 0.140*np.cos(a3))
+                print("z", 0.106*np.sin(a1) + 0.091*np.sin(a2) + 0.140*np.sin(a3))
+                print("a", a1 + a2 + a3)
+                print("------------------------------------")
+            else:
+                nextpos.up1 = self.lastJointTraj.positions[1]
+                nextpos.up2 = self.lastJointTraj.positions[2]
+                nextpos.up3 = self.lastJointTraj.positions[3]
         else:
             nextpos.up1 = self.lastJointTraj.positions[1]
             nextpos.up2 = self.lastJointTraj.positions[2]
@@ -243,7 +256,7 @@ class braccio_control_SendTraj(Node):
         """
         Solves for a1, a2, a3 given:
         x = cos(a1) + cos(a2) + cos(a3)
-        y = sin(a1) + sin(a2) + sin(a3)
+        z = sin(a1) + sin(a2) + sin(a3)
         a = a1 + a2 + a3
         """
         def equations(vars):
@@ -254,9 +267,9 @@ class braccio_control_SendTraj(Node):
             return [eq1, eq2, eq3]
         
         initial_guess = [
-            self.lastJointTraj.positions[1],
-            self.lastJointTraj.positions[2],
-            self.lastJointTraj.positions[3],
+            -self.lastJointTraj.positions[1],
+            -self.lastJointTraj.positions[2],
+            -self.lastJointTraj.positions[3],
             ]
         
         print("int_guess",initial_guess)
