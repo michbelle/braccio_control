@@ -16,6 +16,16 @@ class state_joint_struct():
     up3 : float = 0.0
     gr : float = 0.0
     gc : float = 0.0
+    
+    def get_array(self):
+        return [
+            self.rz,
+            self.up1,
+            self.up2,
+            self.up3,
+            self.gr,
+            self.gc,
+        ]
 
 @dataclass
 class vel_joint_struct():
@@ -34,6 +44,7 @@ class Joy_struct():
     rz : float = 0.0
     gr : float = 0.0
     gc : float = 0.0
+    reset : bool = False
     
     def hasMoved(self) -> bool:
         if abs(self.x)>0.02 or \
@@ -41,7 +52,8 @@ class Joy_struct():
             abs(self.a)>0.02 or \
             abs(self.rz)>0.02 or \
             abs(self.gr)>0.02 or \
-            abs(self.gc)>0.02 :
+            abs(self.gc)>0.02 or \
+            self.reset:
                 return True
         else:
             return False
@@ -49,7 +61,7 @@ class Joy_struct():
  
 @dataclass
 class position_solver_struct():
-    x : float = 3.0
+    x : float = 0.106+0.091+0.140
     z : float = 0.0
     a : float = 0.0
 
@@ -102,31 +114,22 @@ class braccio_control_SendTraj(Node):
             rz = msg.axes[3], 
             gr = msg.axes[2], 
             gc = msg.axes[5],
+            reset=bool(msg.buttons[4]) and bool(msg.buttons[5])
         )
         joy_inp.gr=-(joy_inp.gr-1)/2
         joy_inp.gc=-(joy_inp.gc-1)/2
-        
-        # if abs(joy_inp.x)>0.05 or \
-        #     abs(joy_inp.z)>0.05 or \
-        #     abs(joy_inp.a)>0.05 or \
-        #     abs(joy_inp.rz)>0.05 or \
-        #     abs(joy_inp.gr)>0.05 or \
-        #     abs(joy_inp.gc)>0.05 :
-        #     self._update_joy=True
                 
         with self.Joy_lock:
             self._joy_cmd=joy_inp
     
     def _joiStateCall(self, msg : JointState):
         with self.state_joint_lock:
-            self.state_joint(
-                msg.position[0],
-                msg.position[1],
-                msg.position[2],
-                msg.position[3],
-                msg.position[4],
-                msg.position[5],
-            )
+            self.state_joint.rz = msg.position[0]
+            self.state_joint.up1 = msg.position[1]
+            self.state_joint.up2 = msg.position[2]
+            self.state_joint.up3 = msg.position[3]
+            self.state_joint.gr = msg.position[4]
+            self.state_joint.gc = msg.position[5]
             
     def timerCall(self, ):
         joy_inp=Joy_struct()
@@ -137,6 +140,7 @@ class braccio_control_SendTraj(Node):
             joy_inp.rz=self._joy_cmd.rz
             joy_inp.gr=self._joy_cmd.gr
             joy_inp.gc=self._joy_cmd.gc
+            joy_inp.reset=self._joy_cmd.reset
             
         if not joy_inp.hasMoved():
             return
@@ -153,12 +157,16 @@ class braccio_control_SendTraj(Node):
         JoiTrPnt2 = JointTrajectoryPoint()
         JoiTrPnt2.time_from_start.sec=int(self.timer_period)
         JoiTrPnt2.time_from_start.nanosec=int((self.timer_period-JoiTrPnt1.time_from_start.sec)*1E9)
-        
-        nextpos = self.calculate_next_pos(joy_inp)
-        
-        for pos in nextpos:
-            JoiTrPnt2.positions.append(pos)
-            JoiTrPnt2.velocities.append(0.0)
+        if not joy_inp.reset:
+            nextpos = self.calculate_next_pos(joy_inp)
+            for pos in nextpos.get_array():
+                JoiTrPnt2.positions.append(pos)
+                JoiTrPnt2.velocities.append(0.0)
+        else:
+            for pos in [0.0]*6:
+                JoiTrPnt2.positions.append(pos)
+                JoiTrPnt2.velocities.append(0.0)
+            
         
         self.lastJointTraj=JoiTrPnt2
         
@@ -190,14 +198,24 @@ class braccio_control_SendTraj(Node):
             gc = min(max(gc, -pi), pi)
         nextpos.gc=gc
         
+        if abs(joy_inp.x)<0.2:
+             joy_inp.x=0.0
+        if abs(joy_inp.z)<0.2:
+             joy_inp.z=0.0
+        if abs(joy_inp.a)<0.2:
+             joy_inp.a=0.0
+        
         dx = joy_inp.x*self.max_velocity*(self.timer_period/2)
         dz = joy_inp.z*self.max_velocity*(self.timer_period/2)
         da = joy_inp.a*self.max_velocity*(self.timer_period/2)
+        
+        print(dx, dz, da)
         
         x=self.actual_pos_solver.x+dx
         z=self.actual_pos_solver.z+dz
         a=self.actual_pos_solver.a+da
         
+        print("req", x, z , a)
         sol=self.solve_trig_system(x, z, a)
         
         if sol != None:
@@ -205,9 +223,15 @@ class braccio_control_SendTraj(Node):
             self.actual_pos_solver.x=x
             self.actual_pos_solver.z=z
             self.actual_pos_solver.a=a
-            nextpos.up1 = a1
-            nextpos.up2 = a2
-            nextpos.up3 = a3
+            nextpos.up1 = -a1
+            nextpos.up2 = -a2
+            nextpos.up3 = -a3
+            print("ax",a1 , a2 , a3)
+            
+            print("x", 0.106*np.cos(a1) + 0.091*np.cos(a2) + 0.140*np.cos(a3))
+            print("y",0.106*np.sin(a1) + 0.091*np.sin(a2) + 0.140*np.sin(a3))
+            print("a",a1 + a2 + a3)
+            print("------------------------------------")
         else:
             nextpos.up1 = self.lastJointTraj.positions[1]
             nextpos.up2 = self.lastJointTraj.positions[2]
@@ -224,8 +248,8 @@ class braccio_control_SendTraj(Node):
         """
         def equations(vars):
             a1, a2, a3 = vars
-            eq1 = np.cos(a1) + np.cos(a2) + np.cos(a3) - x
-            eq2 = np.sin(a1) + np.sin(a2) + np.sin(a3) - y
+            eq1 = 0.106*np.cos(a1) + 0.091*np.cos(a2) + 0.140*np.cos(a3) - x
+            eq2 = 0.106*np.sin(a1) + 0.091*np.sin(a2) + 0.140*np.sin(a3) - y
             eq3 = a1 + a2 + a3 - a
             return [eq1, eq2, eq3]
         
@@ -235,13 +259,16 @@ class braccio_control_SendTraj(Node):
             self.lastJointTraj.positions[3],
             ]
         
+        print("int_guess",initial_guess)
+        
         solution, info, ier, msg = fsolve(equations, initial_guess, full_output=True)
         
         res=Bool()
         
         if ier == 1:
             a1, a2, a3 = solution
-            self.get_logger().info(f"Find solution: [{a1},{a2},{a3}]")
+            self.get_logger().info(f"Founded solution: [{a1},{a2},{a3}]")
+            print("sol_guess",a1, a2, a3)
             if abs(a1)>pi or abs(a2)>pi or abs(a3)>pi:
                 res.data=False
                 self._sendResTraj.publish(res)
