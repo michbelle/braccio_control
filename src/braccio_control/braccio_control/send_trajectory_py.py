@@ -261,8 +261,10 @@ class braccio_control_SendTraj(Node):
         """
         def equations(vars):
             a1, a2, a3 = vars
-            eq1 = 0.106*np.cos(a1) + 0.091*np.cos(a2) + 0.140*np.cos(a3) - x
-            eq2 = 0.106*np.sin(a1) + 0.091*np.sin(a2) + 0.140*np.sin(a3) - y
+            # eq1 = 0.106*np.cos(a1) + 0.091*np.cos(a2) + 0.140*np.cos(a3) - x
+            # eq2 = 0.106*np.sin(a1) + 0.091*np.sin(a2) + 0.140*np.sin(a3) - y
+            eq1 = 0.106*np.cos(a1) + 0.091*np.cos(a1+a2) + 0.140*np.cos(a1+a2+a3) - x
+            eq2 = 0.106*np.sin(a1) + 0.091*np.sin(a1+a2) + 0.140*np.sin(a1+a2+a3) - y
             eq3 = a1 + a2 + a3 - a
             return [eq1, eq2, eq3]
         
@@ -282,7 +284,7 @@ class braccio_control_SendTraj(Node):
             a1, a2, a3 = solution
             self.get_logger().info(f"Founded solution: [{a1},{a2},{a3}]")
             print("sol_guess",a1, a2, a3)
-            if abs(a1)>pi or abs(a2)>pi or abs(a3)>pi:
+            if abs(a1)>(pi/2) or abs(a1-a2)>(pi/2) or abs(a1-a2-a3)>(pi/2):
                 res.data=False
                 self._sendResTraj.publish(res)
                 self.get_logger().error(f'solution goes over the limits')
