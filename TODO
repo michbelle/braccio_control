@@ -1,1 +1,5 @@
 [ ] esp32 as access point
+[ ] inverse cinematic solvers : 
+    - https://github.com/legalaspro/so101-ros-physical-ai/blob/main/so101_kinematics/so101_kinematics/so101_ik_control_node.py
+    - https://kevinzakka.github.io/mink/
+[ ] verificare che Pthread on esp32 abilitato
