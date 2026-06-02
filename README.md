@@ -60,6 +60,33 @@ https://github.com/ros-controls/ros2_control_demos/tree/master/example_7
 https://control.ros.org/kilted/doc/getting_started/getting_started.html#hardware-components
 https://youtu.be/ZRrC6Hss01Y
 
+### NIX
+
+https://sgvd.ai/post/2026-03-25-ros2-with-nix/
+https://github.com/lopsided98/nix-ros-overlay
+https://index.0x77.dev/blog/ros-devenv
+
+
+
+nix-channel --add https://github.com/nix-community/nixGL/archive/main.tar.gz nixgl && nix-channel --update
+nix-env -iA nixgl.auto.nixGLDefault
+nixGLDefault
+nixGLNvidia
+nixGLNvidiaBumblebee
+nixVulkanNvidia
+
+You can also install nixgl in a nix profile
+
+nix profile install github:guibou/nixGL --impure
+
+
+nix develop
+
+devenv update
+
+
+nix run --impure github:nix-community/nixGL -- program
+
 
 ## Costruzione del modello del braccio
 
