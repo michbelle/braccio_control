@@ -94,7 +94,7 @@ pca9685_dev_t pca9685_1;
     // #define MODE "client"
     // #define LOCATOR ""  // If empty, it will scout
     #define MODE "client"
-    #define LOCATOR "tcp/192.168.1.7:7447"
+    #define LOCATOR "tcp/192.168.1.4:7447"
 #endif
 
 

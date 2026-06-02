@@ -34,3 +34,15 @@ raspi with zenohpico
 https://zenoh.io/blog/2025-01-08-introducing-raspberry-pi-pico-support-in-zenoh-pico/
 
 zenohd -l serial//dev/ttyACM0#baudrate=112500
+
+https://zenoh.io/blog/2022-08-12-zenoh-serial/
+
+```
+
+$ git clone -b api-changes https://github.com/eclipse-zenoh/zenoh
+$ cd zenoh
+$ cargo build --bin zenohd --example z_sub --no-default-features --features transport_tcp --features transport_serial
+
+    Run zenohd on one terminal:
+
+$ RUST_LOG=debug ./target/debug/zenohd --no-multicast-scouting -l "serial//dev/tty.usbserial-0001#baudrate=115200" -l “tcp/127.0.0.1:7447”
