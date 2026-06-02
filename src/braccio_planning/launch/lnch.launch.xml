@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="braccio_planning" exec="send_traj_rs" name="send_traj_rs" output="screen" />
+
+</launch>

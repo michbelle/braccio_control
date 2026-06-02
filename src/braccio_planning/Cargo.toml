@@ -1,0 +1,18 @@
+[package]
+name = "braccio_planning"
+version = "0.0.1"
+edition = "2024"
+
+[[bin]]
+name = "send_traj_rs"
+path = "src/send_traj.rs"
+
+[dependencies]
+rclrs = "0.7.0"
+anyhow = {version = "1", features = ["backtrace"]}
+
+# This specific version is compatible with Rust 1.75
+backtrace = "=0.3.74"
+
+[package.metadata.ros]
+install_to_share = ["launch"]
