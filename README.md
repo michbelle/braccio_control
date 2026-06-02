@@ -62,31 +62,54 @@ https://youtu.be/ZRrC6Hss01Y
 
 ### NIX
 
+#### update
+```bash
+nix-channel --update
+```
+
+
 https://sgvd.ai/post/2026-03-25-ros2-with-nix/
 https://github.com/lopsided98/nix-ros-overlay
 https://index.0x77.dev/blog/ros-devenv
 
+### Gl application
 
+#### WORK
+You can also install nixgl in a nix profile
 
+```bash
+nix profile install github:guibou/nixGL --impure
+```
+
+#### WORKED but no more
+```bash
 nix-channel --add https://github.com/nix-community/nixGL/archive/main.tar.gz nixgl && nix-channel --update
 nix-env -iA nixgl.auto.nixGLDefault
 nixGLDefault
 nixGLNvidia
 nixGLNvidiaBumblebee
 nixVulkanNvidia
+```
 
-You can also install nixgl in a nix profile
-
-nix profile install github:guibou/nixGL --impure
+### flake 
 
 
+```bash
 nix develop
+```
 
+### devenv
+
+https://devenv.sh/
+
+```bash
 devenv update
+```
 
-
-nix run --impure github:nix-community/nixGL -- program
-
+#### update
+```bash
+devenv update
+```
 
 ## Costruzione del modello del braccio
 
