@@ -106,8 +106,8 @@ class braccio_control_SendTraj(Node):
         self.timer_period = 0.5  # seconds
         self.timer = self.create_timer(self.timer_period, self.timerCall)
 
-        self.max_velocity=0.1#rad/s
-        self.max_velocity_pl=0.01
+        self.max_velocity=0.5#rad/s
+        self.max_velocity_pl=0.05
         
         self._sendResTraj = self.create_publisher(Bool, "/braccio_controller/GenerationTrajResult", 10)
         
@@ -284,7 +284,7 @@ class braccio_control_SendTraj(Node):
             a1, a2, a3 = solution
             self.get_logger().info(f"Founded solution: [{a1},{a2},{a3}]")
             print("sol_guess",a1, a2, a3)
-            if abs(a1)>(pi/2) or abs(a1-a2)>(pi/2) or abs(a1-a2-a3)>(pi/2):
+            if abs(a1)>(pi) or abs(a1-a2)>(pi) or abs(a1-a2-a3)>(pi):
                 res.data=False
                 self._sendResTraj.publish(res)
                 self.get_logger().error(f'solution goes over the limits')
