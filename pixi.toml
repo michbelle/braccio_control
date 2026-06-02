@@ -23,20 +23,20 @@ clean_r = "rm -r build log install"
 
 # Dependencies used by all environments
 [dependencies]
-python = "*"
+python = ">=3.12.13,<3.13"
 # Build tools
-compilers = "*"
-cmake = "*"
-pkg-config = "*"
-make = "*"
-ninja = "*"
+compilers = ">=1.11.0,<2"
+cmake = ">=4.3.2,<5"
+pkg-config = ">=0.29.2,<0.30"
+make = ">=4.4.1,<5"
+ninja = ">=1.13.2,<2"
 # ROS specific tools
-rosdep = "*"
-colcon-common-extensions = "*"
-libgl-devel = "*"
+rosdep = ">=0.26.0,<0.27"
+colcon-common-extensions = ">=0.3.0,<0.4"
+libgl-devel = ">=1.7.0,<2"
 ros-kilted-desktop = ">=0.12.0,<0.13"
 zenoh = ">=1.9.0,<2"
-rust = ">=1.94.0,<1.95"
+rust = ">=1.95.0,<1.96"
 ros-kilted-ros2-control = ">=5.12.0,<6"
 ros-kilted-ros2-control-cmake = ">=0.3.0,<0.4"
 ros-kilted-backward-ros = ">=1.0.8,<2"
@@ -86,6 +86,8 @@ ros-kilted-moveit-ros-perception = ">=2.14.3,<3"
 ros-kilted-joint-trajectory-controller = ">=5.13.1,<6"
 ros-kilted-ament-cmake-python = ">=2.7.5,<3"
 scipy = ">=1.17.1,<2"
+libzenohcxx = ">=1.9.0,<2"
+zenoh-pico = ">=1.8.0,<2"
 
 # pixi add ros-kilted-joy-linux
 # pixi add ros-kilted-liburdfdom
