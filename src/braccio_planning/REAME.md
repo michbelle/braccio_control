@@ -11,3 +11,21 @@ https://doc.rust-lang.org/book/
 
 https://crates.io/
 
+
+### maturin bining python with rust
+
+init env
+```
+maturin init
+```
+
+init env
+```
+maturin init
+```
+
+
+init env
+```
+maturin init
+```
