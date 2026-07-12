@@ -28,7 +28,7 @@ build_rs = "cd src/braccio_planning && cargo build"
 python = "*"
 # Build tools
 compilers = "*"
-cmake = "*"
+cmake = ">=4.4.0,<5"
 pkg-config = "*"
 make = "*"
 ninja = "*"
@@ -104,6 +104,7 @@ ros-kilted-rviz-default-plugins = "*"
 ros-kilted-moveit-ros-perception = "*"
 ros-kilted-joint-trajectory-controller = "*"
 ros-kilted-ament-cmake-python = "*"
+ros-kilted-example-interfaces = "*"
 
 
 [feature.lyrical]
@@ -162,4 +163,8 @@ ros-lyrical-ament-cmake-python = "*"
 
 [activation]
 scripts = ["install/setup.bash"]
+
+[pypi-dependencies]
+colcon-cargo = ">=0.2.0, <0.3"
+colcon-ros-cargo = ">=0.2.0, <0.3"
 # eval "$(register-python-argcomplete ros2)"
