@@ -1,7 +1,8 @@
 
 
 
-use rclrs::std_msgs::msg::String as StringMsg;
+use rclrs::*
+// std_msgs::msg::String as StringMsg;
 
 
 fn main() {

@@ -45,6 +45,7 @@ libzenohcxx = ">=1.9.0,<2"
 scipy = ">=1.17.1,<2"
 filelock = ">=3.29.0,<4"
 libgl-devel = ">=1.7.0,<2"
+maturin = ">=1.14.1,<2"
 
 
 [environments]
@@ -159,6 +160,9 @@ ros-lyrical-rviz-default-plugins = "*"
 ros-lyrical-moveit-ros-perception = "*"
 ros-lyrical-joint-trajectory-controller = "*"
 ros-lyrical-ament-cmake-python = "*"
+
+ros-lyrical-example-interfaces = "*"
+ros-lyrical-test-msgs = "*"
 
 
 [activation]
