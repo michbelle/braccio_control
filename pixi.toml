@@ -51,6 +51,7 @@ maturin = ">=1.14.1,<2"
 [environments]
 kilted = { features = ["kilted"] }
 lyrical = { features = ["lyrical"] }
+rolling = { features = ["rolling"] }
 
 
 [feature.kilted]
@@ -163,6 +164,12 @@ ros-lyrical-ament-cmake-python = "*"
 
 ros-lyrical-example-interfaces = "*"
 ros-lyrical-test-msgs = "*"
+
+[feature.rolling]
+channels = ["https://prefix.dev/robostack-rolling"]
+
+[feature.rolling.dependencies]
+ros-rolling-desktop = "*"
 
 
 [activation]

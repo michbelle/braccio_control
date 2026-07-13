@@ -10,3 +10,16 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = "0.29.0"
+
+
+anyhow = {version = "1", features = ["backtrace"]}
+
+rclrs = "0.7.0"
+ros-env = "0.2.0"
+
+# This specific version is compatible with Rust 1.75
+backtrace = "=0.3.74"
+
+[[bin]]
+name = "send_traj"
+path = "src/send_traj.rs"
