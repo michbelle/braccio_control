@@ -5,15 +5,24 @@
 // std_msgs::msg::String as StringMsg;
 // use ros_env::std_msgs::msg::String;
 
-use ros_env::sensor_msgs::msg::Joy as Joy;
-use ros_env::sensor_msgs::msg::JointState as JointState;
-use ros_env::trajectory_msgs::msg::JointTrajectory as JointTrajectory;
-use ros_env::trajectory_msgs::msg::JointTrajectoryPoint as JointTrajectoryPoint;
-use ros_env::std_msgs::msg::Bool as Bool;
+// use ros_env::sensor_msgs::msg::Joy as Joy;
+// use ros_env::sensor_msgs::msg::JointState as JointState;
+// use ros_env::trajectory_msgs::msg::JointTrajectory as JointTrajectory;
+// use ros_env::trajectory_msgs::msg::JointTrajectoryPoint as JointTrajectoryPoint;
+// use ros_env::std_msgs::msg::Bool as Bool;
 
+struct state_joint{
+    rz : f64,
+    up1 : f64,
+    up2 : f64,
+    up3 : f64,
+    gr : f64,
+    gc : f64,
+}
 
 use anyhow::{Error, Result};
 use rclrs::*;
+use ros_env::*
 
 fn main() -> Result<(), Error> {
     let context = Context::default_from_env()?;
@@ -26,6 +35,8 @@ fn main() -> Result<(), Error> {
     let mut message =  ros_env::std_msgs::msg::String::default();
 
     let mut publish_count: u32 = 1;
+
+    let joint_names  = ["arm_rot", "arm_1_up_down", "arm_2_up_down", "arm_3_up_down", "rot_grasp", "grasp_ctrl"];
 
     while context.ok() {
         message.data = format!("Hello, world! {}", publish_count);
