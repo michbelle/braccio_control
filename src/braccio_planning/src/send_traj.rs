@@ -1,4 +1,6 @@
 
+//https://github.com/ros2-rust/examples/blob/main/rclrs/minimal_pub_sub/src/minimal_two_nodes.rs
+//https://github.com/ros2-rust/ros2_rust/blob/main/docs/writing_a_simple_publisher_and_subscriber.md
 
 
 // use rclrs::*
@@ -22,7 +24,7 @@ struct state_joint{
 
 use anyhow::{Error, Result};
 use rclrs::*;
-use ros_env::*
+use ros_env::*;
 
 fn main() -> Result<(), Error> {
     let context = Context::default_from_env()?;
@@ -30,9 +32,9 @@ fn main() -> Result<(), Error> {
 
     let node = executor.create_node("minimal_publisher")?;
 
-    let publisher = node.create_publisher::< ros_env::std_msgs::msg::String>("pub_msg")?;
+    let publisher = node.create_publisher::<std_msgs::msg::String>("pub_msg")?;
 
-    let mut message =  ros_env::std_msgs::msg::String::default();
+    let mut message =  std_msgs::msg::String::default();
 
     let mut publish_count: u32 = 1;
 
@@ -47,3 +49,18 @@ fn main() -> Result<(), Error> {
     }
     Ok(())
 }
+
+// fn main(){
+//     use std::collections::HashMap;
+
+//     let text = "hello world wonderful world";
+
+//     let mut map = HashMap::new();
+
+//     for word in text.split_whitespace() {
+//         let count = map.entry(word).or_insert(0);
+//         *count += 1;
+//     }
+
+//     println!("{map:?}");
+//     }
