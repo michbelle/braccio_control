@@ -19,21 +19,11 @@ checksum = "320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa"
 
 [[package]]
 name = "ament_rs"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b901da946b7b1620d44563e10c7634681af855a7f5fb59bd09b6eb801dcf6e49"
-dependencies = [
- "itertools 0.8.2",
- "walkdir",
-]
-
-[[package]]
-name = "ament_rs"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68248386ad9d8f95d809309d97ae10ae5984818a563b30c13c9b44aa41f439da"
 dependencies = [
- "itertools 0.14.0",
+ "itertools",
  "walkdir",
 ]
 
@@ -487,15 +477,6 @@ dependencies = [
 
 [[package]]
 name = "itertools"
-version = "0.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f56a2d0bc861f9165be4eb3442afd3c236d8a98afd426f65d92324ae1091a484"
-dependencies = [
- "either",
-]
-
-[[package]]
-name = "itertools"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
@@ -716,17 +697,18 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 
 [[package]]
 name = "rclrs"
-version = "0.7.0"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62fcb68b31b17554f85f80aa807f9b4cd3b6abf201de78cb8fa9bc7ccf07e289"
+checksum = "445cc875d7c153a96d865eadc0550d6d2aca6ba58ff9cc677b49b4dc0e08ec1f"
 dependencies = [
- "ament_rs 0.2.1",
+ "ament_rs",
  "async-std",
  "async-stream",
  "cfg-if",
  "futures",
  "futures-lite",
  "libloading",
+ "ros-env",
  "rosidl_runtime_rs",
  "rustflags",
  "tokio",
@@ -736,22 +718,23 @@ dependencies = [
 
 [[package]]
 name = "ros-env"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f03ecf9ea3b53e2343d531c06e0fd430b2d516732417b4cd0fbd997455b4c35"
+checksum = "9fc92ef7752ec4d0733b0a403cb41babc3f60e78b65d47e9e5f811b32101df4d"
 dependencies = [
- "ament_rs 0.3.0",
+ "ament_rs",
  "cargo_toml",
  "rosidl_runtime_rs",
 ]
 
 [[package]]
 name = "rosidl_runtime_rs"
-version = "0.6.0"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2ff07e0a0795fd185dc92bcc5a90db39611c83397f17581cf80d8c0d8944dd6"
+checksum = "76f1c3a806380f367275768d7fcd71a19d74af71183e304ca96264043399a544"
 dependencies = [
  "cfg-if",
+ "rustflags",
 ]
 
 [[package]]

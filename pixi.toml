@@ -4,6 +4,7 @@ channels = ["conda-forge", "https://prefix.dev/robostack-kilted"]
 name = "braccio_control"
 platforms = ["linux-64"]
 version = "0.1.0"
+preview = ["pixi-build"]
 
 [tasks]
 build_zenoh_c = "mkdir -p src/zenoh-c/build && cd src/zenoh-c/build && cmake .. -DCMAKE_INSTALL_PREFIX=../../../.pixi/envs/default && cmake --build . --target install" 
@@ -39,8 +40,9 @@ rust = "*"
 gz-sim = "*"
 
 zenoh = ">=1.9.0,<2"
-zenoh-pico = ">=1.8.0,<2"
-libzenohcxx = ">=1.9.0,<2"
+# zenoh-pico = ">=1.10.1,<2"
+libzenohcxx = ">=1.10.1,<2"
+zenoh-pico = { git = "https://github.com/eclipse-zenoh/zenoh-pico.git", tag = "1.10.1", package = { version = "1.10.1", build = { backend = { name = "pixi-build-cmake" }}}}
 
 scipy = ">=1.17.1,<2"
 filelock = ">=3.29.0,<4"
@@ -49,65 +51,8 @@ maturin = ">=1.14.1,<2"
 
 
 [environments]
-kilted = { features = ["kilted"] }
 lyrical = { features = ["lyrical"] }
 rolling = { features = ["rolling"] }
-
-
-[feature.kilted]
-channels = ["https://prefix.dev/robostack-kilted"]
-
-[feature.kilted.dependencies]
-ros-kilted-desktop = "*"
-ros-kilted-ros2-control = "*"
-ros-kilted-ros2-control-cmake = "*"
-ros-kilted-backward-ros = "*"
-ros-kilted-pluginlib = "*"
-ros-kilted-kdl-parser = "*"
-ros-kilted-controller-interface = "*"
-ros-kilted-control-msgs = "*"
-ros-kilted-hardware-interface = "*"
-ros-kilted-rclcpp-lifecycle = "*"
-ros-kilted-rclcpp = "*"
-ros-kilted-realtime-tools = "*"
-ros-kilted-trajectory-msgs = "*"
-ros-kilted-joy = "*"
-ros-kilted-sensor-msgs = "*"
-ros-kilted-controller-manager = "*"
-ros-kilted-joint-state-broadcaster = "*"
-ros-kilted-joint-state-publisher-gui = "*"
-ros-kilted-launch-ros = "*"
-ros-kilted-launch = "*"
-ros-kilted-robot-state-publisher = "*"
-ros-kilted-ros2controlcli = "*"
-ros-kilted-ros2launch = "*"
-ros-kilted-rviz2 = "*"
-ros-kilted-urdf = "*"
-ros-kilted-xacro = "*"
-ros-kilted-ament-cmake-pytest = "*"
-ros-kilted-ament-cmake-ros = "*"
-ros-kilted-launch-testing-ament-cmake = "*"
-ros-kilted-launch-testing = "*"
-ros-kilted-rclpy = "*"
-ros-kilted-ament-cmake = "*"
-ros-kilted-moveit = "*"
-ros-kilted-moveit-setup-assistant = "*"
-ros-kilted-moveit-ros-move-group = "*"
-ros-kilted-moveit-kinematics = "*"
-ros-kilted-moveit-planners = "*"
-ros-kilted-moveit-simple-controller-manager = "*"
-ros-kilted-joint-state-publisher = "*"
-ros-kilted-tf2-ros = "*"
-ros-kilted-moveit-configs-utils = "*"
-ros-kilted-moveit-ros-visualization = "*"
-ros-kilted-moveit-ros-warehouse = "*"
-ros-kilted-rviz-common = "*"
-ros-kilted-rviz-default-plugins = "*"
-ros-kilted-moveit-ros-perception = "*"
-ros-kilted-joint-trajectory-controller = "*"
-ros-kilted-ament-cmake-python = "*"
-ros-kilted-example-interfaces = "*"
-
 
 [feature.lyrical]
 channels = ["https://prefix.dev/robostack-lyrical"]
