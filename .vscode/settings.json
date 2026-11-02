@@ -1,12 +1,12 @@
 {
     "cmake.ignoreCMakeListsMissing": true,
-    "ROS2.distro": "kilted",
+    "ROS2.distro": "lyrical",
     "python.autoComplete.extraPaths": [
-        "/opt/ros/kilted/lib/python3.12/site-packages"
+        "/opt/ros/lyrical/lib/python3.12/site-packages"
     ],
     "python.analysis.extraPaths": [
-        "/opt/ros/kilted/lib/python3.12/site-packages"
+        "/opt/ros/lyrical/lib/python3.12/site-packages"
     ],
-    "python-envs.defaultEnvManager": "renan-r-santos.pixi-code:pixi",
-    "python-envs.defaultPackageManager": "renan-r-santos.pixi-code:pixi"
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.defaultPackageManager": "ms-python.python:pip"
 }

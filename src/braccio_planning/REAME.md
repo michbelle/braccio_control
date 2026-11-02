@@ -1,31 +1,14 @@
-# Planning node to control the robot
+# Planning methods to solve the IK of a **3r planar manipulator**
 
-https://github.com/ros2-rust/ros2_rust/blob/main/docs/writing-your-first-rclrs-node.md
+## python examples
 
+for each little step it resolve the nearest solution of the equation
 
+## rust examples
 
+directly resolve the inverse kinematic using the 
 
-## Rust
+## cpp example
 
-https://doc.rust-lang.org/book/
+using the moveit2 library solve the kinematic
 
-https://crates.io/
-
-
-### maturin bining python with rust
-
-init env
-```
-maturin init
-```
-
-init env
-```
-maturin init
-```
-
-
-init env
-```
-maturin init
-```

@@ -255,14 +255,12 @@ class braccio_control_SendTraj(Node):
     def solve_trig_system(self, x, y, a):
         """
         Solves for a1, a2, a3 given:
-        x = cos(a1) + cos(a2) + cos(a3)
-        z = sin(a1) + sin(a2) + sin(a3)
+        x = cos(a1) + cos(a1+a2) + cos(a1+a2+a3)
+        z = sin(a1) + sin(a1+a2) + sin(a1+a2+a3)
         a = a1 + a2 + a3
         """
         def equations(vars):
             a1, a2, a3 = vars
-            # eq1 = 0.106*np.cos(a1) + 0.091*np.cos(a2) + 0.140*np.cos(a3) - x
-            # eq2 = 0.106*np.sin(a1) + 0.091*np.sin(a2) + 0.140*np.sin(a3) - y
             eq1 = 0.106*np.cos(a1) + 0.091*np.cos(a1+a2) + 0.140*np.cos(a1+a2+a3) - x
             eq2 = 0.106*np.sin(a1) + 0.091*np.sin(a1+a2) + 0.140*np.sin(a1+a2+a3) - y
             eq3 = a1 + a2 + a3 - a
